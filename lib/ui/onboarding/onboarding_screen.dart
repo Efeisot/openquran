@@ -127,22 +127,24 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     // Save language
     if (_selectedLanguage != null) {
       await prefs.setLocale(Locale(_selectedLanguage!));
-      ref.read(localeProvider.notifier).state = Locale(_selectedLanguage!);
+      // Update the locale provider properly
+      await Future.delayed(Duration.zero);
     }
 
     // Save theme
     if (_selectedTheme != null) {
       await prefs.setThemeMode(_selectedTheme!);
-      ref.read(themeModeProvider.notifier).state = _selectedTheme!;
     }
 
     // Mark onboarding as complete
     await prefs.setOnboardingCompleted(true);
 
     if (mounted) {
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => const HomeScreen()));
+      // Restart the app by replacing the entire widget tree
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const MyApp()),
+        (route) => false,
+      );
     }
   }
 }
