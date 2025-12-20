@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_application_1/l10n/app_localizations.dart';
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'l10n/app_localizations.dart';
 import 'ui/home/home_screen.dart';
 import 'ui/onboarding/onboarding_screen.dart';
 import 'ui/theme/app_theme.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
 import 'data/local/preferences.dart';
 
 Future<void> main() async {
