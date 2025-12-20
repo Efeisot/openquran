@@ -1,0 +1,51 @@
+Analyzing flutter_application_1...                              
+
+   info • 'ApiClientRef' is deprecated and shouldn't be used. Will be removed in 3.0. Use Ref instead • lib/data/remote/api_client.dart:7:21 • deprecated_member_use_from_same_package
+  error • Target of URI doesn't exist: '../model/surah.dart' • lib/data/repository/quran_repository.dart:5:8 • uri_does_not_exist
+   info • 'QuranRepositoryRef' is deprecated and shouldn't be used. Will be removed in 3.0. Use Ref instead • lib/data/repository/quran_repository.dart:10:33 • deprecated_member_use_from_same_package
+   info • 'AppDatabaseRef' is deprecated and shouldn't be used. Will be removed in 3.0. Use Ref instead • lib/data/repository/quran_repository.dart:18:25 • deprecated_member_use_from_same_package
+  error • The method 'select' isn't defined for the type 'SurahWithVerses' • lib/data/repository/quran_repository.dart:108:13 • undefined_method
+  error • Undefined name 'notes' • lib/data/repository/quran_repository.dart:108:20 • undefined_identifier
+  error • The method 'select' isn't defined for the type 'SurahWithVerses' • lib/data/repository/quran_repository.dart:112:13 • undefined_method
+  error • Undefined name 'notes' • lib/data/repository/quran_repository.dart:112:20 • undefined_identifier
+  error • The method 'update' isn't defined for the type 'SurahWithVerses' • lib/data/repository/quran_repository.dart:121:13 • undefined_method
+  error • Undefined name 'notes' • lib/data/repository/quran_repository.dart:121:20 • undefined_identifier
+  error • The method 'into' isn't defined for the type 'SurahWithVerses' • lib/data/repository/quran_repository.dart:123:13 • undefined_method
+  error • Undefined name 'notes' • lib/data/repository/quran_repository.dart:123:18 • undefined_identifier
+  error • The method 'delete' isn't defined for the type 'SurahWithVerses' • lib/data/repository/quran_repository.dart:134:13 • undefined_method
+  error • Undefined name 'notes' • lib/data/repository/quran_repository.dart:134:20 • undefined_identifier
+  error • The method 'getNotes' isn't defined for the type 'QuranRepository' • lib/ui/reading/reading_screen.dart:10:21 • undefined_method
+  error • The method 'saveNote' isn't defined for the type 'QuranRepository' • lib/ui/reading/reading_screen.dart:52:55 • undefined_method
+   info • Unnecessary use of multiple underscores • lib/ui/reading/reading_screen.dart:77:22 • unnecessary_underscores
+  error • The named parameter 'error' is required, but there's no corresponding argument • lib/ui/reading/reading_screen.dart:81:24 • missing_required_argument
+  error • The named parameter 'loading' is required, but there's no corresponding argument • lib/ui/reading/reading_screen.dart:81:24 • missing_required_argument
+  error • The getter 'text' isn't defined for the type 'Verse' • lib/ui/reading/reading_screen.dart:131:31 • undefined_getter
+  error • The named parameter 'fontFamily' isn't defined • lib/ui/reading/reading_screen.dart:137:25 • undefined_named_parameter
+  error • The named parameter 'fontSize' isn't defined • lib/ui/reading/reading_screen.dart:138:25 • undefined_named_parameter
+  error • The named parameter 'height' isn't defined • lib/ui/reading/reading_screen.dart:139:25 • undefined_named_parameter
+  error • Expected to find ']' • lib/ui/reading/reading_screen.dart:141:21 • expected_token
+  error • Expected an identifier • lib/ui/reading/reading_screen.dart:148:19 • missing_identifier
+  error • Expected to find ')' • lib/ui/reading/reading_screen.dart:148:19 • expected_token
+  error • Expected to find ';' • lib/ui/reading/reading_screen.dart:150:15 • expected_token
+  error • Expected an identifier • lib/ui/reading/reading_screen.dart:150:16 • missing_identifier
+  error • Unexpected text ';' • lib/ui/reading/reading_screen.dart:150:16 • unexpected_token
+  error • Expected to find '}' • lib/ui/reading/reading_screen.dart:151:13 • expected_token
+  error • Expected to find ';' • lib/ui/reading/reading_screen.dart:154:7 • expected_token
+warning • Dead code • lib/ui/reading/reading_screen.dart:154:8 • dead_code
+  error • Expected an identifier • lib/ui/reading/reading_screen.dart:154:8 • missing_identifier
+  error • Unexpected text ';' • lib/ui/reading/reading_screen.dart:154:8 • unexpected_token
+warning • The label 'loading' isn't used • lib/ui/reading/reading_screen.dart:155:7 • unused_label
+  error • Expected to find ';' • lib/ui/reading/reading_screen.dart:156:74 • expected_token
+  error • Expected an identifier • lib/ui/reading/reading_screen.dart:156:75 • missing_identifier
+  error • Unexpected text ';' • lib/ui/reading/reading_screen.dart:156:75 • unexpected_token
+warning • The label 'error' isn't used • lib/ui/reading/reading_screen.dart:157:7 • unused_label
+  error • Expected to find ';' • lib/ui/reading/reading_screen.dart:157:79 • expected_token
+  error • Expected an identifier • lib/ui/reading/reading_screen.dart:157:80 • missing_identifier
+  error • Expected to find ';' • lib/ui/reading/reading_screen.dart:157:80 • expected_token
+  error • Unexpected text ';' • lib/ui/reading/reading_screen.dart:157:80 • unexpected_token
+  error • Expected an identifier • lib/ui/reading/reading_screen.dart:158:5 • missing_identifier
+  error • Unexpected text ';' • lib/ui/reading/reading_screen.dart:158:5 • unexpected_token
+   info • Unnecessary empty statement • lib/ui/reading/reading_screen.dart:158:6 • empty_statements
+   info • 'background' is deprecated and shouldn't be used. Use surface instead. This feature was deprecated after v3.18.0-0.1.pre • lib/ui/theme/app_theme.dart:28:7 • deprecated_member_use
+
+47 issues found. (ran in 0.5s)

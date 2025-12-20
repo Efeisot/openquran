@@ -1,0 +1,1 @@
+Cannot enable "synthetic-package", this feature has been removed. See http://flutter.dev/to/flutter-gen-deprecation.
