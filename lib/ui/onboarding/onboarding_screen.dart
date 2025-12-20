@@ -61,12 +61,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const SizedBox(height: 24),
               Icon(Icons.menu_book, size: 80, color: colorScheme.primary),
               const SizedBox(height: 24),
               Text(
@@ -142,6 +142,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 value: _materialYou,
                 onChanged: _updateMaterialYou,
                 activeColor: colorScheme.primary,
+                contentPadding: EdgeInsets.zero,
               ),
               // AMOLED toggle (only show if dark theme)
               if (_selectedTheme == ThemeMode.dark)
@@ -153,8 +154,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   value: _amoledMode,
                   onChanged: _updateAmoledMode,
                   activeColor: colorScheme.primary,
+                  contentPadding: EdgeInsets.zero,
                 ),
-              const Spacer(),
+              const SizedBox(height: 32),
               FilledButton(
                 onPressed: _selectedLanguage != null
                     ? () => _completeOnboarding()
@@ -167,6 +169,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   style: const TextStyle(fontSize: 16),
                 ),
               ),
+              const SizedBox(height: 24),
             ],
           ),
         ),
