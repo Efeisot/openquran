@@ -60,53 +60,57 @@ class VerseTranslationsScreen extends ConsumerWidget {
             ],
           ),
         ),
-        body: Column(
+        body: TabBarView(
           children: [
-            // Arabic Verse Area - Constrained height with scrolling
-            ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxHeight: 150, // Maximum height to prevent hiding translations
-              ),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SelectableText(
-                    verseText,
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontFamily: 'Amiri',
-                      fontSize: 20,
-                      height: 1.6,
-                      color: colorScheme.onSurface,
+            // Translations Tab
+            translationsAsync.when(
+              data: (translations) {
+                if (translations.isEmpty) {
+                  return Center(
+                    child: Text(
+                      l10n.noTranslationsFound,
+                      style: TextStyle(
+                        color: colorScheme.onSurface.withOpacity(0.6),
+                      ),
                     ),
-                  ),
-                ),
-              ),
-            ),
-            Divider(
-              color: colorScheme.onSurface.withOpacity(0.1),
-              height: 1,
-            ), // Content Area
-            Expanded(
-              child: TabBarView(
-                children: [
-                  // Translations Tab
-                  translationsAsync.when(
-                    data: (translations) {
-                      if (translations.isEmpty) {
-                        return Center(
-                          child: Text(
-                            l10n.noTranslationsFound,
-                            style: TextStyle(
-                              color: colorScheme.onSurface.withOpacity(0.6),
+                  );
+                }
+                return CustomScrollView(
+                  slivers: [
+                    // Arabic Verse Header
+                    SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxHeight: 150),
+                            child: SingleChildScrollView(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: SelectableText(
+                                  verseText,
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                    fontFamily: 'Amiri',
+                                    fontSize: 20,
+                                    height: 1.6,
+                                    color: colorScheme.onSurface,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                        );
-                      }
-                      return ListView.builder(
-                        padding: const EdgeInsets.all(16.0),
-                        itemCount: translations.length,
-                        itemBuilder: (context, index) {
+                          Divider(
+                            color: colorScheme.onSurface.withOpacity(0.1),
+                            height: 1,
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Translations List
+                    SliverPadding(
+                      padding: const EdgeInsets.all(16.0),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate((context, index) {
                           final item = translations[index];
                           return Container(
                             margin: const EdgeInsets.only(bottom: 16.0),
@@ -154,22 +158,25 @@ class VerseTranslationsScreen extends ConsumerWidget {
                               ],
                             ),
                           );
-                        },
-                      );
-                    },
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
-                    error: (err, stack) => Center(
-                      child: Text(
-                        'Error: $err',
-                        style: TextStyle(color: colorScheme.error),
+                        }, childCount: translations.length),
                       ),
                     ),
-                  ),
-                  // Words Tab
-                  _WordsTabView(surahId: surahId, verseNumber: verseNumber),
-                ],
+                  ],
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (err, stack) => Center(
+                child: Text(
+                  'Error: $err',
+                  style: TextStyle(color: colorScheme.error),
+                ),
               ),
+            ),
+            // Words Tab
+            _WordsTabView(
+              surahId: surahId,
+              verseNumber: verseNumber,
+              verseText: verseText,
             ),
           ],
         ),
@@ -190,8 +197,13 @@ final _verseWordsProvider =
 class _WordsTabView extends ConsumerWidget {
   final int surahId;
   final int verseNumber;
+  final String verseText;
 
-  const _WordsTabView({required this.surahId, required this.verseNumber});
+  const _WordsTabView({
+    required this.surahId,
+    required this.verseNumber,
+    required this.verseText,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -211,66 +223,101 @@ class _WordsTabView extends ConsumerWidget {
             ),
           );
         }
-        return ListView.builder(
-          padding: const EdgeInsets.all(16.0),
-          itemCount: words.length,
-          itemBuilder: (context, index) {
-            final word = words[index];
-            // Get translation based on app language setting, not system locale
-            final currentLocale = ref.watch(localeProvider);
-            final isTurkish = currentLocale?.languageCode == 'tr';
-            final translation = isTurkish
-                ? word.translationTr
-                : word.translationEn;
-            final transcription = isTurkish
-                ? word.transcriptionTr
-                : word.transcriptionEn;
-
-            return Card(
-              margin: const EdgeInsets.only(bottom: 8.0),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                  vertical: 10.0,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Arabic word
-                    Text(
-                      word.arabic,
-                      style: TextStyle(
-                        fontFamily: 'Amiri',
-                        fontSize: 24,
-                        color: colorScheme.onSurface,
+        return CustomScrollView(
+          slivers: [
+            // Arabic Verse Header
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxHeight: 150),
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SelectableText(
+                          verseText,
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            fontFamily: 'Amiri',
+                            fontSize: 20,
+                            height: 1.6,
+                            color: colorScheme.onSurface,
+                          ),
+                        ),
                       ),
                     ),
-                    if (transcription != null) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        transcription,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontStyle: FontStyle.italic,
-                          color: colorScheme.onSurface.withOpacity(0.5),
-                        ),
-                      ),
-                    ],
-                    if (translation != null) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        translation,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: colorScheme.onSurface.withOpacity(0.8),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
+                  ),
+                  Divider(
+                    color: colorScheme.onSurface.withOpacity(0.1),
+                    height: 1,
+                  ),
+                ],
               ),
-            );
-          },
+            ),
+            // Words List
+            SliverPadding(
+              padding: const EdgeInsets.all(16.0),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final word = words[index];
+                  // Get translation based on app language setting, not system locale
+                  final currentLocale = ref.watch(localeProvider);
+                  final isTurkish = currentLocale?.languageCode == 'tr';
+                  final translation = isTurkish
+                      ? word.translationTr
+                      : word.translationEn;
+                  final transcription = isTurkish
+                      ? word.transcriptionTr
+                      : word.transcriptionEn;
+
+                  return Card(
+                    margin: const EdgeInsets.only(bottom: 8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 10.0,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Arabic word
+                          Text(
+                            word.arabic,
+                            style: TextStyle(
+                              fontFamily: 'Amiri',
+                              fontSize: 24,
+                              color: colorScheme.onSurface,
+                            ),
+                          ),
+                          if (transcription != null) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              transcription,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontStyle: FontStyle.italic,
+                                color: colorScheme.onSurface.withOpacity(0.5),
+                              ),
+                            ),
+                          ],
+                          if (translation != null) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              translation,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: colorScheme.onSurface.withOpacity(0.8),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  );
+                }, childCount: words.length),
+              ),
+            ),
+          ],
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
