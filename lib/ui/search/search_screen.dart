@@ -205,54 +205,30 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Autocomplete<String>(
-          optionsBuilder: (TextEditingValue textEditingValue) {
-            return _getSuggestions(textEditingValue.text);
+        title: TextField(
+          controller: _searchController,
+          autofocus: true,
+          style: Theme.of(context).textTheme.titleMedium,
+          decoration: InputDecoration(
+            hintText: l10n.searchHint,
+            border: InputBorder.none,
+            hintStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+            ),
+          ),
+          onChanged: (value) {
+            // Trigger search immediately for suggestions
+            setState(() {
+              _query = value;
+            });
+            // Debounce actual search
+            Future.delayed(const Duration(milliseconds: 500), () {
+              if (_searchController.text == value && mounted) {
+                _performSearch(value);
+              }
+            });
           },
-          onSelected: (String selection) {
-            _searchController.text = selection;
-            _performSearch(selection);
-          },
-          fieldViewBuilder:
-              (
-                BuildContext context,
-                TextEditingController textEditingController,
-                FocusNode focusNode,
-                VoidCallback onFieldSubmitted,
-              ) {
-                _searchController.text = textEditingController
-                    .text; // Keep internal controller in sync
-                return TextField(
-                  controller: textEditingController,
-                  focusNode: focusNode,
-                  autofocus: true,
-                  style: Theme.of(context).textTheme.titleMedium,
-                  decoration: InputDecoration(
-                    hintText: l10n.searchHint,
-                    border: InputBorder.none,
-                    hintStyle: Theme.of(context).textTheme.titleMedium
-                        ?.copyWith(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSurface.withOpacity(0.6),
-                        ),
-                  ),
-                  onChanged: (value) {
-                    // Update the internal controller and trigger suggestions
-                    _searchController.text = value;
-                    // Trigger debounced search
-                    Future.delayed(const Duration(milliseconds: 500), () {
-                      if (_searchController.text == value) {
-                        _performSearch(value);
-                      }
-                    });
-                  },
-                  onSubmitted: (value) {
-                    _searchController.text = value;
-                    _performSearch(value);
-                  },
-                );
-              },
+          onSubmitted: _performSearch,
         ),
         actions: [
           if (_searchController.text.isNotEmpty)
@@ -297,6 +273,51 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             ),
           ],
         ),
+      );
+    }
+
+    // Show suggestions inline if query is short and no results yet
+    if (_results.isEmpty && _query.length <= 3) {
+      return FutureBuilder<Iterable<String>>(
+        future: _getSuggestions(_query),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.search_off,
+                    size: 64,
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withOpacity(0.3),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    l10n.noResults,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              final suggestion = snapshot.data!.elementAt(index);
+              return ListTile(
+                leading: const Icon(Icons.search),
+                title: Text(suggestion),
+                onTap: () {
+                  _searchController.text = suggestion;
+                  _performSearch(suggestion);
+                },
+              );
+            },
+          );
+        },
       );
     }
 

@@ -160,8 +160,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             subtitle: const Text('github.com/efeisot/openQuran'),
             onTap: () async {
               final url = Uri.parse('https://github.com/efeisot/openQuran');
-              if (await canLaunchUrl(url)) {
+              try {
                 await launchUrl(url, mode: LaunchMode.externalApplication);
+              } catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Could not open link: $e')),
+                  );
+                }
               }
             },
           ),
@@ -174,8 +180,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               final url = Uri.parse(
                 'https://github.com/ziegfiroyt/acikkuran-api',
               );
-              if (await canLaunchUrl(url)) {
+              try {
                 await launchUrl(url, mode: LaunchMode.externalApplication);
+              } catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Could not open link: $e')),
+                  );
+                }
               }
             },
           ),
