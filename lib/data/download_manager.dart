@@ -94,13 +94,15 @@ class DownloadManager {
               return;
             }
 
-            // Fetch and cache translations
-            await _repository.getTranslationsForVerse(
-              surah.id,
-              verse.verseNumber,
+            // Cache the specific author's translation for this verse
+            await _repository.cacheTranslationForVerse(
+              surahId: surah.id,
+              verseNumber: verse.verseNumber,
+              authorId: authorId,
             );
           }
         } catch (e) {
+          print('Error downloading surah ${surah.id}: $e');
           // Continue with next surah on error
           continue;
         }

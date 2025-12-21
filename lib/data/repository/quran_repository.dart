@@ -262,6 +262,53 @@ class QuranRepository {
       _db.downloadedTranslations,
     )..where((t) => t.authorId.equals(authorId))).go();
   }
+
+  // Download and cache translation for a specific author and verse
+  Future<void> cacheTranslationForVerse({
+    required int surahId,
+    required int verseNumber,
+    required int authorId,
+  }) async {
+    try {
+      final translationsData = await _api.getVerseTranslations(
+        surahId,
+        verseNumber,
+      );
+
+      // Find the translation for the specified author
+      final authorTranslation = translationsData.firstWhere(
+        (data) => data['author']['id'] == authorId,
+        orElse: () => {},
+      );
+
+      if (authorTranslation.isEmpty) return;
+
+      // Get the verse ID from database
+      final verse =
+          await (_db.select(_db.verses)..where(
+                (t) =>
+                    t.surahId.equals(surahId) &
+                    t.verseNumber.equals(verseNumber),
+              ))
+              .getSingleOrNull();
+
+      if (verse == null) return;
+
+      // Save translation to database
+      await _db
+          .into(_db.translations)
+          .insert(
+            TranslationsCompanion(
+              verseId: Value(verse.id),
+              authorId: Value(authorId),
+              content: Value(authorTranslation['text']),
+            ),
+            mode: InsertMode.insertOrReplace,
+          );
+    } catch (e) {
+      // Silently fail - translation just won't be cached
+    }
+  }
 }
 
 class SurahWithVerses {
