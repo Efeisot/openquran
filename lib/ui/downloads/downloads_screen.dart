@@ -27,6 +27,9 @@ class _DownloadsScreenState extends ConsumerState<DownloadsScreen> {
           .progressStream
           .listen((progress) {
             if (mounted) {
+              print(
+                'Progress update for author ${progress.authorId}: ${progress.currentSurah}/${progress.totalSurahs}',
+              );
               setState(() {
                 _downloadProgress[progress.authorId] = progress;
               });
@@ -232,6 +235,14 @@ class _DownloadsScreenState extends ConsumerState<DownloadsScreen> {
     return IconButton(
       icon: const Icon(Icons.download),
       onPressed: () {
+        // Immediately set a progress state to show download is starting
+        setState(() {
+          _downloadProgress[author.id] = DownloadProgress(
+            currentSurah: 0,
+            totalSurahs: 114,
+            authorId: author.id,
+          );
+        });
         downloadManager.downloadTranslation(author.id, author.name);
       },
     );
