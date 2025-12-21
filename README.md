@@ -143,10 +143,15 @@ This project is open source and available under the [GNU Affero General Public L
 - **Repository**: [github.com/efeisot/openQuran](https://github.com/efeisot/openQuran)
 - **Issues**: [github.com/efeisot/openQuran/issues](https://github.com/efeisot/openQuran/issues)
 
+## Thanks To
+- [acik-kuran](https://github.com/acik-kuran) for api
+- [SavunOski](https://github.com/savunoski) for help
+- Gemini Pro and Claude Sonnet/Opus for writing most of the lines
+
 ## Version
 
-**Current Version**: v1.0-beta
+**Current Version**: v1.1-beta
 
 ---
 
-Made with ❤️ for the Muslim community
+Made with patience, for the Muslim community
