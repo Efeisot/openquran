@@ -104,12 +104,7 @@ class MyApp extends ConsumerWidget {
         if (useMaterialYou && lightDynamic != null && darkDynamic != null) {
           // Use Material You colors
           lightColorScheme = lightDynamic;
-          darkColorScheme = isAmoled
-              ? darkDynamic.copyWith(
-                  surface: Colors.black,
-                  background: Colors.black,
-                )
-              : darkDynamic;
+          darkColorScheme = darkDynamic;
         } else {
           // Use custom theme colors
           lightColorScheme = null;
@@ -122,9 +117,41 @@ class MyApp extends ConsumerWidget {
           theme: lightColorScheme != null
               ? ThemeData(useMaterial3: true, colorScheme: lightColorScheme)
               : AppTheme.lightTheme,
-          darkTheme: darkColorScheme != null
-              ? ThemeData(useMaterial3: true, colorScheme: darkColorScheme)
-              : (isAmoled ? AppTheme.amoledTheme : AppTheme.darkTheme),
+          darkTheme: () {
+            // If AMOLED mode is enabled, use pure black theme
+            if (isAmoled) {
+              if (darkColorScheme != null) {
+                // Apply AMOLED colors to Material You theme
+                return ThemeData(
+                  useMaterial3: true,
+                  colorScheme: darkColorScheme.copyWith(
+                    surface: Colors.black,
+                    background: Colors.black,
+                  ),
+                  scaffoldBackgroundColor: Colors.black,
+                  appBarTheme: const AppBarTheme(
+                    backgroundColor: Colors.black,
+                    surfaceTintColor: Colors.transparent,
+                  ),
+                );
+              } else {
+                // Use custom AMOLED theme
+                return AppTheme.amoledTheme;
+              }
+            } else {
+              // AMOLED mode is OFF - use regular dark theme
+              if (darkColorScheme != null) {
+                // Use Material You dark theme as-is
+                return ThemeData(
+                  useMaterial3: true,
+                  colorScheme: darkColorScheme,
+                );
+              } else {
+                // Use custom dark theme
+                return AppTheme.darkTheme;
+              }
+            }
+          }(),
           themeMode: themeMode,
           locale: locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,

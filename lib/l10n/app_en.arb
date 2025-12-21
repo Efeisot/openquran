@@ -1,5 +1,5 @@
 {
-  "appTitle": "Açık Kuran",
+  "appTitle": "openQuran",
   "surah": "Surah",
   "verse": "Verse",
   "verses": "Verses",
@@ -40,5 +40,25 @@
   "defaultTranslation": "Default Translation",
   "none": "None",
   "previousVerse": "Previous Verse",
-  "nextVerse": "Next Verse"
+  "nextVerse": "Next Verse",
+  "search": "Search",
+  "searchVerses": "Search Verses",
+  "searchSurahs": "Search Surahs",
+  "searchWords": "Search Words",
+  "searchResults": "Search Results",
+  "noResults": "No results found",
+  "searchHint": "Search for verses, surahs, or enter 1:1 for specific verse",
+  "downloadedTranslations": "Downloaded Translations",
+  "download": "Download",
+  "downloading": "Downloading...",
+  "downloaded": "Downloaded",
+  "downloadFailed": "Download failed",
+  "noDownloadedTranslations": "No downloaded translations",
+  "downloadTranslationsFirst": "Download translations first for offline use",
+  "downloadComplete": "Download complete",
+  "credits": "Credits",
+  "apiProvider": "API Provider",
+  "apiCredit": "Quran data provided by acikkuran.com",
+  "deleteTranslation": "Delete Translation",
+  "translationDeleted": "Translation deleted"
 }

@@ -113,10 +113,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             future: ref.read(quranRepositoryProvider).getAuthors(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return ListTile(
-                  title: Text(l10n.defaultTranslation),
-                  subtitle: Text(l10n.none),
-                );
+                return ListTile(title: Text(l10n.defaultTranslation));
               }
               final authors = snapshot.data!;
               final currentAuthorId = ref
@@ -128,7 +125,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
               return ListTile(
                 title: Text(l10n.defaultTranslation),
-                subtitle: Text(currentAuthor?.name ?? l10n.none),
+                subtitle: currentAuthor != null ? null : Text(l10n.none),
                 trailing: DropdownButton<int?>(
                   value: currentAuthorId,
                   onChanged: (int? authorId) {
@@ -151,6 +148,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             },
           ),
           const Divider(),
+          // Credits Section
+          ListTile(
+            leading: const Icon(Icons.favorite),
+            title: Text(l10n.credits),
+          ),
           // Source Code
           ListTile(
             leading: const Icon(Icons.code),
@@ -163,11 +165,25 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               }
             },
           ),
+          // API Provider
+          ListTile(
+            leading: const Icon(Icons.api),
+            title: Text(l10n.apiProvider),
+            subtitle: Text(l10n.apiCredit),
+            onTap: () async {
+              final url = Uri.parse(
+                'https://github.com/ziegfiroyt/acikkuran-api',
+              );
+              if (await canLaunchUrl(url)) {
+                await launchUrl(url, mode: LaunchMode.externalApplication);
+              }
+            },
+          ),
           // Version
           ListTile(
             leading: const Icon(Icons.info_outline),
             title: Text(l10n.version),
-            subtitle: const Text('v1.0-beta'),
+            subtitle: const Text('v1.1-beta'),
           ),
           const Divider(),
           const Divider(),

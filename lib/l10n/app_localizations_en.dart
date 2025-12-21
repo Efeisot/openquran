@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Açık Kuran';
+  String get appTitle => 'openQuran';
 
   @override
   String get surah => 'Surah';
@@ -132,4 +132,66 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nextVerse => 'Next Verse';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get searchVerses => 'Search Verses';
+
+  @override
+  String get searchSurahs => 'Search Surahs';
+
+  @override
+  String get searchWords => 'Search Words';
+
+  @override
+  String get searchResults => 'Search Results';
+
+  @override
+  String get noResults => 'No results found';
+
+  @override
+  String get searchHint =>
+      'Search for verses, surahs, or enter 1:1 for specific verse';
+
+  @override
+  String get downloadedTranslations => 'Downloaded Translations';
+
+  @override
+  String get download => 'Download';
+
+  @override
+  String get downloading => 'Downloading...';
+
+  @override
+  String get downloaded => 'Downloaded';
+
+  @override
+  String get downloadFailed => 'Download failed';
+
+  @override
+  String get noDownloadedTranslations => 'No downloaded translations';
+
+  @override
+  String get downloadTranslationsFirst =>
+      'Download translations first for offline use';
+
+  @override
+  String get downloadComplete => 'Download complete';
+
+  @override
+  String get credits => 'Credits';
+
+  @override
+  String get apiProvider => 'API Provider';
+
+  @override
+  String get apiCredit => 'Quran data provided by acikkuran.com';
+
+  @override
+  String get deleteTranslation => 'Delete Translation';
+
+  @override
+  String get translationDeleted => 'Translation deleted';
 }

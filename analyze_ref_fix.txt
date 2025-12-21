@@ -1,5 +1,0 @@
-Analyzing flutter_application_1...                              
-
-   info • Unnecessary use of multiple underscores • lib/ui/reading/reading_screen.dart:83:22 • unnecessary_underscores
-
-1 issue found. (ran in 0.6s)

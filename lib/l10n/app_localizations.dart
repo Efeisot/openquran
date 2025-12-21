@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'Açık Kuran'**
+  /// **'openQuran'**
   String get appTitle;
 
   /// No description provided for @surah.
@@ -343,6 +343,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next Verse'**
   String get nextVerse;
+
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
+
+  /// No description provided for @searchVerses.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Verses'**
+  String get searchVerses;
+
+  /// No description provided for @searchSurahs.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Surahs'**
+  String get searchSurahs;
+
+  /// No description provided for @searchWords.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Words'**
+  String get searchWords;
+
+  /// No description provided for @searchResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Results'**
+  String get searchResults;
+
+  /// No description provided for @noResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get noResults;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for verses, surahs, or enter 1:1 for specific verse'**
+  String get searchHint;
+
+  /// No description provided for @downloadedTranslations.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloaded Translations'**
+  String get downloadedTranslations;
+
+  /// No description provided for @download.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get download;
+
+  /// No description provided for @downloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading...'**
+  String get downloading;
+
+  /// No description provided for @downloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloaded'**
+  String get downloaded;
+
+  /// No description provided for @downloadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Download failed'**
+  String get downloadFailed;
+
+  /// No description provided for @noDownloadedTranslations.
+  ///
+  /// In en, this message translates to:
+  /// **'No downloaded translations'**
+  String get noDownloadedTranslations;
+
+  /// No description provided for @downloadTranslationsFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Download translations first for offline use'**
+  String get downloadTranslationsFirst;
+
+  /// No description provided for @downloadComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Download complete'**
+  String get downloadComplete;
+
+  /// No description provided for @credits.
+  ///
+  /// In en, this message translates to:
+  /// **'Credits'**
+  String get credits;
+
+  /// No description provided for @apiProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'API Provider'**
+  String get apiProvider;
+
+  /// No description provided for @apiCredit.
+  ///
+  /// In en, this message translates to:
+  /// **'Quran data provided by acikkuran.com'**
+  String get apiCredit;
+
+  /// No description provided for @deleteTranslation.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Translation'**
+  String get deleteTranslation;
+
+  /// No description provided for @translationDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation deleted'**
+  String get translationDeleted;
 }
 
 class _AppLocalizationsDelegate

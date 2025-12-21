@@ -9,7 +9,7 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
-  String get appTitle => 'Açık Kuran';
+  String get appTitle => 'openQuran';
 
   @override
   String get surah => 'Sure';
@@ -134,4 +134,66 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nextVerse => 'Sonraki Ayet';
+
+  @override
+  String get search => 'Ara';
+
+  @override
+  String get searchVerses => 'Ayet Ara';
+
+  @override
+  String get searchSurahs => 'Sure Ara';
+
+  @override
+  String get searchWords => 'Kelime Ara';
+
+  @override
+  String get searchResults => 'Arama Sonuçları';
+
+  @override
+  String get noResults => 'Sonuç bulunamadı';
+
+  @override
+  String get searchHint => 'Ayet, sure arayın veya belirli ayet için 1:1 girin';
+
+  @override
+  String get downloadedTranslations => 'İndirilen Çeviriler';
+
+  @override
+  String get download => 'İndir';
+
+  @override
+  String get downloading => 'İndiriliyor...';
+
+  @override
+  String get downloaded => 'İndirildi';
+
+  @override
+  String get downloadFailed => 'İndirme başarısız';
+
+  @override
+  String get noDownloadedTranslations => 'İndirilmiş çeviri yok';
+
+  @override
+  String get downloadTranslationsFirst =>
+      'Çevrimdışı kullanım için önce çevirileri indirin';
+
+  @override
+  String get downloadComplete => 'İndirme tamamlandı';
+
+  @override
+  String get credits => 'Katkıda Bulunanlar';
+
+  @override
+  String get apiProvider => 'API Sağlayıcısı';
+
+  @override
+  String get apiCredit =>
+      'Kuran verileri acikkuran.com tarafından sağlanmaktadır';
+
+  @override
+  String get deleteTranslation => 'Çeviriyi Sil';
+
+  @override
+  String get translationDeleted => 'Çeviri silindi';
 }
