@@ -91,6 +91,15 @@ class QuranRepository {
     });
   }
 
+  Future<List<Author>> getAuthors() async {
+    final localAuthors = await _db.select(_db.authors).get();
+    if (localAuthors.isEmpty) {
+      await syncAuthors();
+      return _db.select(_db.authors).get();
+    }
+    return localAuthors;
+  }
+
   Future<void> syncSurahDetails(int surahId) async {
     final data = await _api.getSurah(surahId);
     final versesData = data['verses'] as List;
@@ -143,6 +152,30 @@ class QuranRepository {
 
       return TranslationWithAuthor(translation, author);
     }).toList();
+  }
+
+  Future<String?> getDefaultTranslationForVerse(
+    int surahId,
+    int verseNumber,
+    int authorId,
+  ) async {
+    try {
+      final translationsData = await _api.getVerseTranslations(
+        surahId,
+        verseNumber,
+      );
+
+      // Find the translation for the specified author
+      final authorTranslation = translationsData.firstWhere(
+        (data) => data['author']['id'] == authorId,
+        orElse: () => {},
+      );
+
+      if (authorTranslation.isEmpty) return null;
+      return authorTranslation['text'] as String?;
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<List<VerseWord>> getVerseWords(int surahId, int verseNumber) async {

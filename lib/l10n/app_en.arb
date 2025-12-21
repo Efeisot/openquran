@@ -34,5 +34,11 @@
   "dataClearedMessage": "Data cleared. Pull to refresh on home screen.",
   "continueReading": "Continue Reading",
   "noSavedVersesYet": "No saved verses yet",
-  "longPressToAddNote": "Long-press on any verse to add a note"
+  "longPressToAddNote": "Long-press on any verse to add a note",
+  "sourceCode": "Source Code",
+  "version": "Version",
+  "defaultTranslation": "Default Translation",
+  "none": "None",
+  "previousVerse": "Previous Verse",
+  "nextVerse": "Next Verse"
 }

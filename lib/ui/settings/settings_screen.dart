@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_application_1/l10n/app_localizations.dart';
+import 'package:open_quran/l10n/app_localizations.dart';
 import '../../data/repository/quran_repository.dart';
+import '../../data/local/preferences.dart';
 import '../../main.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -105,6 +107,69 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ],
             ),
           ),
+          const Divider(),
+          // Default Translation
+          FutureBuilder(
+            future: ref.read(quranRepositoryProvider).getAuthors(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return ListTile(
+                  title: Text(l10n.defaultTranslation),
+                  subtitle: Text(l10n.none),
+                );
+              }
+              final authors = snapshot.data!;
+              final currentAuthorId = ref
+                  .read(preferencesProvider)
+                  .getDefaultTranslationAuthorId();
+              final currentAuthor = authors
+                  .where((a) => a.id == currentAuthorId)
+                  .firstOrNull;
+
+              return ListTile(
+                title: Text(l10n.defaultTranslation),
+                subtitle: Text(currentAuthor?.name ?? l10n.none),
+                trailing: DropdownButton<int?>(
+                  value: currentAuthorId,
+                  onChanged: (int? authorId) {
+                    ref
+                        .read(preferencesProvider)
+                        .setDefaultTranslationAuthorId(authorId);
+                    setState(() {}); // Refresh to update subtitle
+                  },
+                  items: [
+                    DropdownMenuItem<int?>(value: null, child: Text(l10n.none)),
+                    ...authors.map(
+                      (author) => DropdownMenuItem<int?>(
+                        value: author.id,
+                        child: Text(author.name),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          const Divider(),
+          // Source Code
+          ListTile(
+            leading: const Icon(Icons.code),
+            title: Text(l10n.sourceCode),
+            subtitle: const Text('github.com/efeisot/openQuran'),
+            onTap: () async {
+              final url = Uri.parse('https://github.com/efeisot/openQuran');
+              if (await canLaunchUrl(url)) {
+                await launchUrl(url, mode: LaunchMode.externalApplication);
+              }
+            },
+          ),
+          // Version
+          ListTile(
+            leading: const Icon(Icons.info_outline),
+            title: Text(l10n.version),
+            subtitle: const Text('v1.0-beta'),
+          ),
+          const Divider(),
           const Divider(),
           ListTile(
             leading: _isRefreshing

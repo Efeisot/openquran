@@ -34,5 +34,11 @@
   "dataClearedMessage": "Veriler temizlendi. Ana ekranda yenilemek için aşağı kaydırın.",
   "continueReading": "Okumaya Devam Et",
   "noSavedVersesYet": "Henüz kaydedilmiş ayet yok",
-  "longPressToAddNote": "Not eklemek için herhangi bir ayete uzun basın"
+  "longPressToAddNote": "Not eklemek için herhangi bir ayete uzun basın",
+  "sourceCode": "Kaynak Kodu",
+  "version": "Sürüm",
+  "defaultTranslation": "Varsayılan Çeviri",
+  "none": "Hiçbiri",
+  "previousVerse": "Önceki Ayet",
+  "nextVerse": "Sonraki Ayet"
 }

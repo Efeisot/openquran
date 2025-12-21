@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_application_1/l10n/app_localizations.dart';
+import 'package:open_quran/l10n/app_localizations.dart';
 import '../../data/repository/quran_repository.dart';
 import '../../data/local/database.dart';
 import '../../data/local/preferences.dart';
@@ -263,7 +263,11 @@ class _ReadingScreenState extends ConsumerState<ReadingScreen> {
                               Icon(
                                 Icons.note_alt,
                                 size: 20,
-                                color: Theme.of(context).primaryColor,
+                                color:
+                                    Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).primaryColor,
                               ),
                           ],
                         ),
@@ -291,6 +295,43 @@ class _ReadingScreenState extends ConsumerState<ReadingScreen> {
                             ),
                           ),
                         ],
+                        // Translation preview if default translation is set
+                        FutureBuilder<String?>(
+                          future: () {
+                            final authorId = ref
+                                .read(preferencesProvider)
+                                .getDefaultTranslationAuthorId();
+                            if (authorId == null) return Future.value(null);
+                            return ref
+                                .read(quranRepositoryProvider)
+                                .getDefaultTranslationForVerse(
+                                  widget.surahId,
+                                  verse.verseNumber,
+                                  authorId,
+                                );
+                          }(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData || snapshot.data == null) {
+                              return const SizedBox.shrink();
+                            }
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 12),
+                              child: Text(
+                                snapshot.data!,
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.color
+                                      ?.withOpacity(0.8),
+                                  height: 1.5,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ),

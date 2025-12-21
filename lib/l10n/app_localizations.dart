@@ -307,6 +307,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Long-press on any verse to add a note'**
   String get longPressToAddNote;
+
+  /// No description provided for @sourceCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Source Code'**
+  String get sourceCode;
+
+  /// No description provided for @version.
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get version;
+
+  /// No description provided for @defaultTranslation.
+  ///
+  /// In en, this message translates to:
+  /// **'Default Translation'**
+  String get defaultTranslation;
+
+  /// No description provided for @none.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get none;
+
+  /// No description provided for @previousVerse.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous Verse'**
+  String get previousVerse;
+
+  /// No description provided for @nextVerse.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Verse'**
+  String get nextVerse;
 }
 
 class _AppLocalizationsDelegate

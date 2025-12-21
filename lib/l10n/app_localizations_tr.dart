@@ -116,4 +116,22 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get longPressToAddNote =>
       'Not eklemek için herhangi bir ayete uzun basın';
+
+  @override
+  String get sourceCode => 'Kaynak Kodu';
+
+  @override
+  String get version => 'Sürüm';
+
+  @override
+  String get defaultTranslation => 'Varsayılan Çeviri';
+
+  @override
+  String get none => 'Hiçbiri';
+
+  @override
+  String get previousVerse => 'Önceki Ayet';
+
+  @override
+  String get nextVerse => 'Sonraki Ayet';
 }

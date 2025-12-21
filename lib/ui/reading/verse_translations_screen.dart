@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_application_1/l10n/app_localizations.dart';
+import 'package:open_quran/l10n/app_localizations.dart';
 import '../../data/repository/quran_repository.dart';
+import '../../data/local/preferences.dart';
 import '../../main.dart';
 
 final verseTranslationsProvider =
@@ -13,7 +14,7 @@ final verseTranslationsProvider =
       return repository.getTranslationsForVerse(args.surahId, args.verseNumber);
     });
 
-class VerseTranslationsScreen extends ConsumerWidget {
+class VerseTranslationsScreen extends ConsumerStatefulWidget {
   final int surahId;
   final int verseNumber;
   final String verseText;
@@ -26,22 +27,103 @@ class VerseTranslationsScreen extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<VerseTranslationsScreen> createState() =>
+      _VerseTranslationsScreenState();
+}
+
+class _VerseTranslationsScreenState
+    extends ConsumerState<VerseTranslationsScreen> {
+  late int currentSurahId;
+  late int currentVerseNumber;
+  late String currentVerseText;
+
+  @override
+  void initState() {
+    super.initState();
+    currentSurahId = widget.surahId;
+    currentVerseNumber = widget.verseNumber;
+    currentVerseText = widget.verseText;
+  }
+
+  void _navigateToPrevious() async {
+    if (currentVerseNumber > 1) {
+      // Previous verse in same surah
+      final repository = ref.read(quranRepositoryProvider);
+      final surahData = await repository.getSurahDetails(currentSurahId);
+      final prevVerse = surahData.verses.firstWhere(
+        (v) => v.verseNumber == currentVerseNumber - 1,
+      );
+
+      setState(() {
+        currentVerseNumber = prevVerse.verseNumber;
+        currentVerseText = prevVerse.verse;
+      });
+    } else if (currentSurahId > 1) {
+      // Last verse of previous surah
+      final repository = ref.read(quranRepositoryProvider);
+      final prevSurahData = await repository.getSurahDetails(
+        currentSurahId - 1,
+      );
+      final lastVerse = prevSurahData.verses.last;
+
+      setState(() {
+        currentSurahId--;
+        currentVerseNumber = lastVerse.verseNumber;
+        currentVerseText = lastVerse.verse;
+      });
+    }
+  }
+
+  void _navigateToNext() async {
+    final repository = ref.read(quranRepositoryProvider);
+    final surahData = await repository.getSurahDetails(currentSurahId);
+
+    if (currentVerseNumber < surahData.surah.verseCount) {
+      // Next verse in same surah
+      final nextVerse = surahData.verses.firstWhere(
+        (v) => v.verseNumber == currentVerseNumber + 1,
+      );
+
+      setState(() {
+        currentVerseNumber = nextVerse.verseNumber;
+        currentVerseText = nextVerse.verse;
+      });
+    } else if (currentSurahId < 114) {
+      // First verse of next surah
+      final nextSurahData = await repository.getSurahDetails(
+        currentSurahId + 1,
+      );
+      final firstVerse = nextSurahData.verses.first;
+
+      setState(() {
+        currentSurahId++;
+        currentVerseNumber = firstVerse.verseNumber;
+        currentVerseText = firstVerse.verse;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final translationsAsync = ref.watch(
-      verseTranslationsProvider((surahId: surahId, verseNumber: verseNumber)),
+      verseTranslationsProvider((
+        surahId: currentSurahId,
+        verseNumber: currentVerseNumber,
+      )),
     );
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final defaultAuthorId = ref
+        .watch(preferencesProvider)
+        .getDefaultTranslationAuthorId();
 
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        // Don't set backgroundColor here - let it use theme default which respects AMOLED
         appBar: AppBar(
-          // Don't set backgroundColor - use theme default
           title: Text(
-            '${surahId}. ${l10n.surah}, ${verseNumber}. ${l10n.verse}',
+            '${currentSurahId}. ${l10n.surah}, ${currentVerseNumber}. ${l10n.verse}',
             style: TextStyle(
               fontSize: 16,
               color: colorScheme.onSurface.withOpacity(0.7),
@@ -50,6 +132,22 @@ class VerseTranslationsScreen extends ConsumerWidget {
           iconTheme: IconThemeData(
             color: colorScheme.onSurface.withOpacity(0.7),
           ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              onPressed: (currentSurahId == 1 && currentVerseNumber == 1)
+                  ? null
+                  : _navigateToPrevious,
+              tooltip: l10n.previousVerse,
+            ),
+            IconButton(
+              icon: const Icon(Icons.arrow_forward_ios),
+              onPressed: (currentSurahId == 114 && currentVerseNumber >= 6)
+                  ? null
+                  : _navigateToNext,
+              tooltip: l10n.nextVerse,
+            ),
+          ],
           bottom: TabBar(
             indicatorColor: colorScheme.primary,
             labelColor: colorScheme.onSurface,
@@ -75,6 +173,13 @@ class VerseTranslationsScreen extends ConsumerWidget {
                     ),
                   );
                 }
+
+                // Reorder translations to show default first
+                final reorderedTranslations = _reorderTranslations(
+                  translations,
+                  defaultAuthorId,
+                );
+
                 return CustomScrollView(
                   slivers: [
                     // Arabic Verse Header
@@ -87,7 +192,7 @@ class VerseTranslationsScreen extends ConsumerWidget {
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: SelectableText(
-                                  verseText,
+                                  currentVerseText,
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
                                     fontFamily: 'Amiri',
@@ -111,7 +216,10 @@ class VerseTranslationsScreen extends ConsumerWidget {
                       padding: const EdgeInsets.all(16.0),
                       sliver: SliverList(
                         delegate: SliverChildBuilderDelegate((context, index) {
-                          final item = translations[index];
+                          final item = reorderedTranslations[index];
+                          final isDefault =
+                              defaultAuthorId != null &&
+                              item.author.id == defaultAuthorId;
                           return Container(
                             margin: const EdgeInsets.only(bottom: 16.0),
                             child: Column(
@@ -122,17 +230,28 @@ class VerseTranslationsScreen extends ConsumerWidget {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
-                                      child: Text(
-                                        item.author.name,
-                                        style: TextStyle(
-                                          color: colorScheme.onSurface
-                                              .withOpacity(0.7),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                        ),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            item.author.name,
+                                            style: TextStyle(
+                                              color: colorScheme.onSurface
+                                                  .withOpacity(0.7),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          if (isDefault) ...[
+                                            const SizedBox(width: 8),
+                                            Icon(
+                                              Icons.star,
+                                              size: 16,
+                                              color: colorScheme.primary,
+                                            ),
+                                          ],
+                                        ],
                                       ),
                                     ),
-                                    // Icons like screenshot (Sound, etc - placeholders)
                                     Icon(
                                       Icons.volume_up_outlined,
                                       size: 16,
@@ -158,7 +277,7 @@ class VerseTranslationsScreen extends ConsumerWidget {
                               ],
                             ),
                           );
-                        }, childCount: translations.length),
+                        }, childCount: reorderedTranslations.length),
                       ),
                     ),
                   ],
@@ -174,14 +293,30 @@ class VerseTranslationsScreen extends ConsumerWidget {
             ),
             // Words Tab
             _WordsTabView(
-              surahId: surahId,
-              verseNumber: verseNumber,
-              verseText: verseText,
+              surahId: currentSurahId,
+              verseNumber: currentVerseNumber,
+              verseText: currentVerseText,
             ),
           ],
         ),
       ),
     );
+  }
+
+  List<TranslationWithAuthor> _reorderTranslations(
+    List<TranslationWithAuthor> translations,
+    int? defaultAuthorId,
+  ) {
+    if (defaultAuthorId == null) return translations;
+
+    final defaultTranslation = translations
+        .where((t) => t.author.id == defaultAuthorId)
+        .toList();
+    final otherTranslations = translations
+        .where((t) => t.author.id != defaultAuthorId)
+        .toList();
+
+    return [...defaultTranslation, ...otherTranslations];
   }
 }
 
@@ -211,7 +346,6 @@ class _WordsTabView extends ConsumerWidget {
       _verseWordsProvider((surahId: surahId, verseNumber: verseNumber)),
     );
     final colorScheme = Theme.of(context).colorScheme;
-    final l10n = AppLocalizations.of(context)!;
 
     return wordsAsync.when(
       data: (words) {

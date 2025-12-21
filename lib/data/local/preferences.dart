@@ -18,6 +18,8 @@ class Preferences {
   static const String _lastReadVerseKey = 'lastReadVerse';
   static const String _materialYouKey = 'materialYou';
   static const String _onboardingCompletedKey = 'onboardingCompleted';
+  static const String _defaultTranslationAuthorIdKey =
+      'defaultTranslationAuthorId';
 
   ThemeMode getThemeMode() {
     final index = _prefs.getInt(_themeModeKey);
@@ -82,6 +84,18 @@ class Preferences {
 
   Future<void> setMaterialYou(bool enabled) async {
     await _prefs.setBool(_materialYouKey, enabled);
+  }
+
+  int? getDefaultTranslationAuthorId() {
+    return _prefs.getInt(_defaultTranslationAuthorIdKey);
+  }
+
+  Future<void> setDefaultTranslationAuthorId(int? authorId) async {
+    if (authorId == null) {
+      await _prefs.remove(_defaultTranslationAuthorIdKey);
+    } else {
+      await _prefs.setInt(_defaultTranslationAuthorIdKey, authorId);
+    }
   }
 }
 

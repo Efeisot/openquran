@@ -4,7 +4,7 @@ import '../../data/repository/quran_repository.dart';
 import '../../data/local/database.dart';
 import '../reading/reading_screen.dart';
 import '../settings/settings_screen.dart';
-import 'package:flutter_application_1/l10n/app_localizations.dart';
+import 'package:open_quran/l10n/app_localizations.dart';
 import '../reading/saved_verses_screen.dart';
 import '../../data/local/preferences.dart';
 

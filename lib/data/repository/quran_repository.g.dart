@@ -6,7 +6,7 @@ part of 'quran_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$quranRepositoryHash() => r'5a4a8aa3959643571cbcc9d17fb515be43a2d312';
+String _$quranRepositoryHash() => r'39302f18d54783cec0b7b32bd18719a82a907e40';
 
 /// See also [quranRepository].
 @ProviderFor(quranRepository)
@@ -23,7 +23,7 @@ final quranRepositoryProvider = AutoDisposeProvider<QuranRepository>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef QuranRepositoryRef = AutoDisposeProviderRef<QuranRepository>;
-String _$appDatabaseHash() => r'e151cda86f5d12245922187e36c675da52ecec4f';
+String _$appDatabaseHash() => r'd45cc0b6c7795466b6a12d864805fefa097f39cd';
 
 /// See also [appDatabase].
 @ProviderFor(appDatabase)

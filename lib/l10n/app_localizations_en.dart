@@ -114,4 +114,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get longPressToAddNote => 'Long-press on any verse to add a note';
+
+  @override
+  String get sourceCode => 'Source Code';
+
+  @override
+  String get version => 'Version';
+
+  @override
+  String get defaultTranslation => 'Default Translation';
+
+  @override
+  String get none => 'None';
+
+  @override
+  String get previousVerse => 'Previous Verse';
+
+  @override
+  String get nextVerse => 'Next Verse';
 }
