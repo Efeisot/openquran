@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 import '../local/database.dart';
 import '../remote/api_client.dart';
 
@@ -94,8 +97,15 @@ class QuranRepository {
   Future<List<Author>> getAuthors() async {
     final localAuthors = await _db.select(_db.authors).get();
     if (localAuthors.isEmpty) {
-      await syncAuthors();
-      return _db.select(_db.authors).get();
+      try {
+        await syncAuthors();
+        return _db.select(_db.authors).get();
+      } catch (e) {
+        // If sync fails (offline), return empty list or throw
+        // This allows the UI to show error state
+        print('Failed to sync authors (possibly offline): $e');
+        rethrow;
+      }
     }
     return localAuthors;
   }
@@ -158,8 +168,25 @@ class QuranRepository {
 
       return results;
     } catch (e) {
-      // On network error, try to load from cache
-      return _getCachedTranslations(surahId, verseNumber);
+      // Fallback 1: Try to load from cached translations
+      final cached = await _getCachedTranslations(surahId, verseNumber);
+
+      // Fallback 2: Try to load from downloaded translations
+      final downloaded = await _getDownloadedTranslations(surahId, verseNumber);
+
+      // Combine and deduplicate by author ID
+      final allTranslations = [...cached, ...downloaded];
+      final seenAuthorIds = <int>{};
+      final deduplicated = <TranslationWithAuthor>[];
+
+      for (final trans in allTranslations) {
+        if (!seenAuthorIds.contains(trans.author.id)) {
+          seenAuthorIds.add(trans.author.id);
+          deduplicated.add(trans);
+        }
+      }
+
+      return deduplicated;
     }
   }
 
@@ -219,6 +246,94 @@ class QuranRepository {
 
       return TranslationWithAuthor(translation, author);
     }).toList();
+  }
+
+  // Query downloaded translations from the separate DatabaseHelper database
+  Future<List<TranslationWithAuthor>> _getDownloadedTranslations(
+    int surahId,
+    int verseNumber,
+  ) async {
+    try {
+      // Open the downloaded translations database
+      final dbPath = await getDatabasesPath();
+      final path = join(dbPath, 'quran_translations.db');
+
+      // Check if database exists first
+      final dbFile = File(path);
+      if (!await dbFile.exists()) {
+        return [];
+      }
+
+      final db = await openDatabase(path);
+
+      try {
+        // Get list of downloaded author IDs
+        final downloadedAuthors = await db.query('downloaded_authors');
+        if (downloadedAuthors.isEmpty) {
+          return [];
+        }
+
+        final authorIds = downloadedAuthors
+            .map((a) => a['author_id'] as int)
+            .toList();
+
+        //Fix SQL query to handle empty list properly
+        if (authorIds.isEmpty) return [];
+
+        // Build IN clause manually to avoid SQL injection
+        final placeholders = List.filled(authorIds.length, '?').join(',');
+
+        // Get translations for this verse from downloaded authors
+        final verses = await db.query(
+          'verses',
+          where:
+              'surah_id = ? AND verse_number = ? AND author_id IN ($placeholders)',
+          whereArgs: [surahId, verseNumber, ...authorIds],
+        );
+
+        if (verses.isEmpty) {
+          return [];
+        }
+
+        // Get author details from AppDatabase for each verse
+        final results = <TranslationWithAuthor>[];
+        for (final v in verses) {
+          final authorId = v['author_id'] as int;
+
+          // Try to get author from local database
+          final author = await (_db.select(
+            _db.authors,
+          )..where((t) => t.id.equals(authorId))).getSingleOrNull();
+
+          if (author != null) {
+            results.add(
+              TranslationWithAuthor(
+                Translation(
+                  id: 0,
+                  verseId: 0,
+                  authorId: authorId,
+                  content: v['text'] as String,
+                ),
+                author,
+              ),
+            );
+          } else {
+            // Author not found in AppDatabase - need to sync authors first
+            print(
+              'Warning: Author $authorId found in downloads but not in AppDatabase',
+            );
+          }
+        }
+
+        return results;
+      } finally {
+        await db.close();
+      }
+    } catch (e) {
+      // Return empty list if downloaded translations database doesn't exist or query fails
+      print('Error loading downloaded translations: $e');
+      return [];
+    }
   }
 
   Future<String?> getDefaultTranslationForVerse(
@@ -386,10 +501,32 @@ class QuranRepository {
   }
 
   Future<bool> isTranslationDownloaded(int authorId) async {
-    final result = await (_db.select(
-      _db.downloadedTranslations,
-    )..where((t) => t.authorId.equals(authorId))).getSingleOrNull();
-    return result != null;
+    try {
+      // Check the actual downloaded translations database (DatabaseHelper)
+      final dbPath = await getDatabasesPath();
+      final path = join(dbPath, 'quran_translations.db');
+
+      // Check if database exists
+      final dbFile = File(path);
+      if (!await dbFile.exists()) {
+        return false;
+      }
+
+      final db = await openDatabase(path);
+      try {
+        final result = await db.query(
+          'downloaded_authors',
+          where: 'author_id = ?',
+          whereArgs: [authorId],
+        );
+        return result.isNotEmpty;
+      } finally {
+        await db.close();
+      }
+    } catch (e) {
+      print('Error checking if translation downloaded: $e');
+      return false;
+    }
   }
 
   Future<void> saveDownloadedTranslation({

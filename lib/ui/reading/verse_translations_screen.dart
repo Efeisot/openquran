@@ -14,6 +14,16 @@ final verseTranslationsProvider =
       return repository.getTranslationsForVerse(args.surahId, args.verseNumber);
     });
 
+// Check if author is downloaded locally
+final isAuthorDownloadedProvider = FutureProvider.family<bool, int>((
+  ref,
+  authorId,
+) async {
+  // Use ref.read() to avoid disposal errors in async provider
+  final repository = ref.read(quranRepositoryProvider);
+  return repository.isTranslationDownloaded(authorId);
+});
+
 class VerseTranslationsScreen extends ConsumerStatefulWidget {
   final int surahId;
   final int verseNumber;
@@ -275,6 +285,39 @@ class _VerseTranslationsScreenState
                                               color: colorScheme.primary,
                                             ),
                                           ],
+                                          // Show download icon for locally downloaded translations
+                                          Consumer(
+                                            builder: (context, ref, _) {
+                                              final isDownloadedAsync = ref
+                                                  .watch(
+                                                    isAuthorDownloadedProvider(
+                                                      item.author.id,
+                                                    ),
+                                                  );
+                                              return isDownloadedAsync.when(
+                                                data: (isDownloaded) =>
+                                                    isDownloaded
+                                                    ? Padding(
+                                                        padding:
+                                                            const EdgeInsets.only(
+                                                              left: 8,
+                                                            ),
+                                                        child: Icon(
+                                                          Icons
+                                                              .download_done_rounded,
+                                                          size: 16,
+                                                          color: colorScheme
+                                                              .tertiary,
+                                                        ),
+                                                      )
+                                                    : const SizedBox.shrink(),
+                                                loading: () =>
+                                                    const SizedBox.shrink(),
+                                                error: (_, __) =>
+                                                    const SizedBox.shrink(),
+                                              );
+                                            },
+                                          ),
                                         ],
                                       ),
                                     ),

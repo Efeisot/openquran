@@ -30,30 +30,39 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.8
-  flutter_riverpod: ^2.4.9
-  riverpod_annotation: ^2.3.3
-  drift: ^2.14.1
-  sqlite3_flutter_libs: ^0.5.18
-  path_provider: ^2.1.1
-  path: ^1.8.3
-  dio: ^5.4.0
-  google_fonts: ^6.1.0
-  shared_preferences: ^2.2.2
-  json_annotation: ^4.8.1
+  flutter_localizations:
+    sdk: flutter
+  
+  # State Management
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+  
+  # Database
+  drift: ^2.20.3
+  sqlite3_flutter_libs: ^0.5.24
+  path_provider: ^2.1.4
+  path: ^1.9.0
+  
+  # Networking
+  dio: ^5.7.0
+  
+  # UI Components
+  dynamic_color: ^1.7.0
+  
+  # Local Database (for downloads)
+  sqflite: ^2.3.3+2
+  
+  # Background downloads and notifications
+  flutter_local_notifications: ^17.0.0
+  permission_handler: ^11.0.0
 
   freezed_annotation: ^2.4.1
   intl: ^0.20.2
-  dynamic_color: ^1.7.0
   url_launcher: ^6.2.3
-  flutter_localizations:
-    sdk: flutter
-  # flutter_localizations:
-  #   sdk: flutter
-  # intl: ^0.18.1
+  cupertino_icons: ^1.0.8
+  google_fonts: ^6.1.0
+  shared_preferences: ^2.2.2
+  json_annotation: ^4.8.1
 
 
 
