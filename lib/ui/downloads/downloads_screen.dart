@@ -75,7 +75,6 @@ class _DownloadsScreenState extends ConsumerState<DownloadsScreen> {
 
   Widget _buildAuthorTile(Author author) {
     final downloadManager = ref.read(downloadManagerProvider);
-    final l10n = AppLocalizations.of(context)!;
     final progress = _downloadProgress[author.id];
 
     return FutureBuilder<bool>(
