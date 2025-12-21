@@ -109,10 +109,8 @@ class _ReadingScreenState extends ConsumerState<ReadingScreen> {
 
   @override
   void dispose() {
-    // Save last position when leaving the screen with current verse
-    ref
-        .read(preferencesProvider)
-        .setLastRead(widget.surahId, _currentVerseNumber);
+    // Note: Cannot save position here because ref is unavailable after dispose
+    // Position is saved when navigating away via WillPopScope or AppBar back button
     _scrollController.dispose();
     super.dispose();
   }
