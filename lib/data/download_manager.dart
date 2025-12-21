@@ -46,6 +46,7 @@ class DownloadManager {
       final surahs = await _repository.getSurahs();
       final totalSurahs = surahs.length;
       int totalVerses = 0;
+      int consecutiveErrors = 0;
 
       for (int i = 0; i < surahs.length; i++) {
         // Check if cancelled
@@ -73,8 +74,13 @@ class DownloadManager {
         );
 
         try {
-          // Sync surah details (downloads verses)
-          await _repository.syncSurahDetails(surah.id);
+          // Check cancellation before syncing
+          if (_cancelFlags[authorId] == true) break;
+
+          // Sync surah details with timeout
+          await _repository
+              .syncSurahDetails(surah.id)
+              .timeout(const Duration(seconds: 30));
 
           // Get verses to count them
           final surahDetails = await _repository.getSurahDetails(surah.id);
@@ -94,15 +100,40 @@ class DownloadManager {
               return;
             }
 
-            // Cache the specific author's translation for this verse
-            await _repository.cacheTranslationForVerse(
-              surahId: surah.id,
-              verseNumber: verse.verseNumber,
-              authorId: authorId,
-            );
+            // Cache translation with timeout
+            try {
+              await _repository
+                  .cacheTranslationForVerse(
+                    surahId: surah.id,
+                    verseNumber: verse.verseNumber,
+                    authorId: authorId,
+                  )
+                  .timeout(const Duration(seconds: 10));
+            } catch (e) {
+              // Skip this verse on timeout/error
+              continue;
+            }
           }
+
+          // Reset error count on successful surah download
+          consecutiveErrors = 0;
         } catch (e) {
           print('Error downloading surah ${surah.id}: $e');
+          consecutiveErrors++;
+
+          // Stop after 3 consecutive errors (likely network issue)
+          if (consecutiveErrors >= 3) {
+            _progressController.add(
+              DownloadProgress(
+                currentSurah: i,
+                totalSurahs: totalSurahs,
+                authorId: authorId,
+                error: 'Network error. Please check your internet connection.',
+              ),
+            );
+            return;
+          }
+
           // Continue with next surah on error
           continue;
         }
