@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:open_quran/l10n/app_localizations.dart';
+import 'package:open_quran/data/local/preferences.dart';
 import '../../data/repository/quran_repository.dart';
-import '../../data/local/preferences.dart';
 import '../../main.dart';
 import 'package:url_launcher/url_launcher.dart';
 

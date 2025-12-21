@@ -141,6 +141,36 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     final repository = ref.read(quranRepositoryProvider);
     final suggestions = <String>[];
 
+    // Check if it's a verse reference pattern (e.g., "2:1" or "2:")
+    final verseRefPattern = RegExp(r'^(\d+):(\d*)$');
+    final match = verseRefPattern.firstMatch(pattern);
+
+    if (match != null) {
+      // It's a verse reference like "2:1" or "2:"
+      final surahId = int.tryParse(match.group(1)!);
+      final verseNum = match.group(2);
+
+      if (surahId != null && surahId >= 1 && surahId <= 114) {
+        try {
+          final surahDetails = await repository.getSurahDetails(surahId);
+
+          if (verseNum!.isEmpty) {
+            // Just "2:" - suggest some verse numbers
+            suggestions.add('$surahId:1');
+            if (surahDetails.verses.length > 1) suggestions.add('$surahId:2');
+            if (surahDetails.verses.length > 4) suggestions.add('$surahId:5');
+            if (surahDetails.verses.length > 9) suggestions.add('$surahId:10');
+          } else {
+            // Complete reference like "2:1"
+            suggestions.add(pattern);
+          }
+        } catch (e) {
+          // Surah not found
+        }
+      }
+      return suggestions.take(5);
+    }
+
     // Suggest surah names
     final surahs = await repository.getSurahs();
     for (final surah in surahs) {
@@ -150,21 +180,18 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       if (surah.nameEn.toLowerCase().contains(pattern.toLowerCase())) {
         suggestions.add(surah.nameEn);
       }
-    }
-
-    // Suggest verse references if pattern looks like a number or partial reference
-    if (RegExp(r'^\d+$').hasMatch(pattern)) {
-      // If only a number, suggest surah numbers
-      final surahId = int.tryParse(pattern);
-      if (surahId != null && surahId >= 1 && surahId <= 114) {
-        suggestions.add('$surahId');
+      // If pattern is a number, suggest matching surah IDs
+      if (RegExp(r'^\d+$').hasMatch(pattern)) {
+        final num = int.tryParse(pattern);
+        if (num != null && surah.id.toString().startsWith(pattern)) {
+          suggestions.add(
+            '${surah.id}:1',
+          ); // Suggest first verse of matching surahs
+        }
       }
-    } else if (RegExp(r'^\d+:\d*$').hasMatch(pattern)) {
-      // If it's a partial verse reference like "1:" or "1:5"
-      suggestions.add(pattern);
     }
 
-    // Limit suggestions to avoid overwhelming the user
+    // Limit suggestions
     return suggestions.take(5);
   }
 
