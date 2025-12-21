@@ -63,6 +63,33 @@ class DownloadedTranslations extends Table {
   Set<Column> get primaryKey => {authorId};
 }
 
+// Cache translations locally for offline access
+class CachedTranslations extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get surahId => integer()();
+  IntColumn get verseNumber => integer()();
+  IntColumn get authorId => integer()();
+  TextColumn get authorName => text()();
+  TextColumn get authorDescription => text().nullable()();
+  TextColumn get authorLanguage => text()();
+  TextColumn get content => text()();
+  DateTimeColumn get cachedAt => dateTime().withDefault(currentDateAndTime)();
+}
+
+// Cache verse words (word-by-word analysis) for offline access
+class CachedVerseWords extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get surahId => integer()();
+  IntColumn get verseNumber => integer()();
+  TextColumn get arabic => text()();
+  TextColumn get transcriptionTr => text().nullable()();
+  TextColumn get transcriptionEn => text().nullable()();
+  TextColumn get translationTr => text().nullable()();
+  TextColumn get translationEn => text().nullable()();
+  IntColumn get sortNumber => integer()();
+  DateTimeColumn get cachedAt => dateTime().withDefault(currentDateAndTime)();
+}
+
 @DriftDatabase(
   tables: [
     Surahs,
@@ -71,13 +98,15 @@ class DownloadedTranslations extends Table {
     Translations,
     Notes,
     DownloadedTranslations,
+    CachedTranslations,
+    CachedVerseWords,
   ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration {
@@ -91,6 +120,10 @@ class AppDatabase extends _$AppDatabase {
         }
         if (from < 3) {
           await m.createTable(downloadedTranslations);
+        }
+        if (from < 4) {
+          await m.createTable(cachedTranslations);
+          await m.createTable(cachedVerseWords);
         }
       },
     );

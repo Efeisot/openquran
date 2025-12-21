@@ -165,10 +165,36 @@ class _VerseTranslationsScreenState
               data: (translations) {
                 if (translations.isEmpty) {
                   return Center(
-                    child: Text(
-                      l10n.noTranslationsFound,
-                      style: TextStyle(
-                        color: colorScheme.onSurface.withOpacity(0.6),
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.cloud_off,
+                            size: 48,
+                            color: colorScheme.onSurface.withOpacity(0.4),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            l10n.noCachedData,
+                            style: TextStyle(
+                              color: colorScheme.onSurface.withOpacity(0.6),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                          TextButton.icon(
+                            onPressed: () => ref.invalidate(
+                              verseTranslationsProvider((
+                                surahId: currentSurahId,
+                                verseNumber: currentVerseNumber,
+                              )),
+                            ),
+                            icon: const Icon(Icons.refresh),
+                            label: Text(l10n.retry),
+                          ),
+                        ],
                       ),
                     ),
                   );
@@ -285,9 +311,37 @@ class _VerseTranslationsScreenState
               },
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (err, stack) => Center(
-                child: Text(
-                  'Error: $err',
-                  style: TextStyle(color: colorScheme.error),
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.cloud_off, size: 48, color: colorScheme.error),
+                      const SizedBox(height: 16),
+                      Text(
+                        l10n.noInternetConnection,
+                        style: theme.textTheme.titleMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        l10n.noCachedData,
+                        style: theme.textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      FilledButton.icon(
+                        onPressed: () => ref.invalidate(
+                          verseTranslationsProvider((
+                            surahId: currentSurahId,
+                            verseNumber: currentVerseNumber,
+                          )),
+                        ),
+                        icon: const Icon(Icons.refresh),
+                        label: Text(l10n.retry),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -347,13 +401,43 @@ class _WordsTabView extends ConsumerWidget {
     );
     final colorScheme = Theme.of(context).colorScheme;
 
+    final l10n = AppLocalizations.of(context)!;
+
     return wordsAsync.when(
       data: (words) {
         if (words.isEmpty) {
           return Center(
-            child: Text(
-              'No word data available',
-              style: TextStyle(color: colorScheme.onSurface.withOpacity(0.6)),
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.cloud_off,
+                    size: 48,
+                    color: colorScheme.onSurface.withOpacity(0.4),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    l10n.noCachedData,
+                    style: TextStyle(
+                      color: colorScheme.onSurface.withOpacity(0.6),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  TextButton.icon(
+                    onPressed: () => ref.invalidate(
+                      _verseWordsProvider((
+                        surahId: surahId,
+                        verseNumber: verseNumber,
+                      )),
+                    ),
+                    icon: const Icon(Icons.refresh),
+                    label: Text(l10n.retry),
+                  ),
+                ],
+              ),
             ),
           );
         }
@@ -456,9 +540,37 @@ class _WordsTabView extends ConsumerWidget {
       },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, stack) => Center(
-        child: Text(
-          'Error loading words: $err',
-          style: TextStyle(color: colorScheme.error),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.cloud_off, size: 48, color: colorScheme.error),
+              const SizedBox(height: 16),
+              Text(
+                l10n.noInternetConnection,
+                style: Theme.of(context).textTheme.titleMedium,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                l10n.noCachedData,
+                style: Theme.of(context).textTheme.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              FilledButton.icon(
+                onPressed: () => ref.invalidate(
+                  _verseWordsProvider((
+                    surahId: surahId,
+                    verseNumber: verseNumber,
+                  )),
+                ),
+                icon: const Icon(Icons.refresh),
+                label: Text(l10n.retry),
+              ),
+            ],
+          ),
         ),
       ),
     );

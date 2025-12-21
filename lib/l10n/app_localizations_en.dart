@@ -200,4 +200,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get delete => 'Delete';
+
+  @override
+  String get offlineMode => 'Offline Mode';
+
+  @override
+  String get offlineMessage => 'You are offline. Showing cached data.';
+
+  @override
+  String get noInternetConnection => 'No internet connection';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get noCachedData =>
+      'No cached data available. Please connect to the internet.';
+
+  @override
+  String get loadingFromCache => 'Loading from cache...';
 }

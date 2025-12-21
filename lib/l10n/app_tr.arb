@@ -62,5 +62,11 @@
   "deleteTranslation": "Çeviriyi Sil",
   "translationDeleted": "Çeviri silindi",
   "downloadTranslations": "Çevirileri İndir",
-  "delete": "Sil"
+  "delete": "Sil",
+  "offlineMode": "Çevrimdışı Mod",
+  "offlineMessage": "Çevrimdışısınız. Önbellekten yükleniyor.",
+  "noInternetConnection": "İnternet bağlantısı yok",
+  "retry": "Tekrar Dene",
+  "noCachedData": "Önbellekte veri yok. Lütfen internete bağlanın.",
+  "loadingFromCache": "Önbellekten yükleniyor..."
 }

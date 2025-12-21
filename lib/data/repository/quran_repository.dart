@@ -128,26 +128,93 @@ class QuranRepository {
     int surahId,
     int verseNumber,
   ) async {
-    // Fetch directly from API instead of local DB
-    // This way we don't need verses to be synced first
-    final translationsData = await _api.getVerseTranslations(
-      surahId,
-      verseNumber,
-    );
+    try {
+      // Try to fetch from API first
+      final translationsData = await _api.getVerseTranslations(
+        surahId,
+        verseNumber,
+      );
 
-    return translationsData.map<TranslationWithAuthor>((data) {
+      final results = translationsData.map<TranslationWithAuthor>((data) {
+        final author = Author(
+          id: data['author']['id'],
+          name: data['author']['name'],
+          description: data['author']['description'],
+          language: data['author']['language'],
+        );
+
+        final translation = Translation(
+          id: data['id'],
+          verseId: 0,
+          authorId: data['author']['id'],
+          content: data['text'],
+        );
+
+        return TranslationWithAuthor(translation, author);
+      }).toList();
+
+      // Cache the results for offline use
+      await _cacheTranslations(surahId, verseNumber, translationsData);
+
+      return results;
+    } catch (e) {
+      // On network error, try to load from cache
+      return _getCachedTranslations(surahId, verseNumber);
+    }
+  }
+
+  Future<void> _cacheTranslations(
+    int surahId,
+    int verseNumber,
+    List<dynamic> translationsData,
+  ) async {
+    try {
+      await _db.batch((batch) {
+        batch.insertAll(
+          _db.cachedTranslations,
+          translationsData.map(
+            (data) => CachedTranslationsCompanion.insert(
+              surahId: surahId,
+              verseNumber: verseNumber,
+              authorId: data['author']['id'],
+              authorName: data['author']['name'],
+              authorDescription: Value(data['author']['description']),
+              authorLanguage: data['author']['language'],
+              content: data['text'],
+            ),
+          ),
+          mode: InsertMode.insertOrReplace,
+        );
+      });
+    } catch (e) {
+      // Silently fail - caching is best-effort
+    }
+  }
+
+  Future<List<TranslationWithAuthor>> _getCachedTranslations(
+    int surahId,
+    int verseNumber,
+  ) async {
+    final cached =
+        await (_db.select(_db.cachedTranslations)..where(
+              (t) =>
+                  t.surahId.equals(surahId) & t.verseNumber.equals(verseNumber),
+            ))
+            .get();
+
+    return cached.map((c) {
       final author = Author(
-        id: data['author']['id'],
-        name: data['author']['name'],
-        description: data['author']['description'],
-        language: data['author']['language'],
+        id: c.authorId,
+        name: c.authorName,
+        description: c.authorDescription,
+        language: c.authorLanguage,
       );
 
       final translation = Translation(
-        id: data['id'],
-        verseId: 0, // Not needed for display since we fetch from API
-        authorId: data['author']['id'],
-        content: data['text'],
+        id: 0,
+        verseId: 0,
+        authorId: c.authorId,
+        content: c.content,
       );
 
       return TranslationWithAuthor(translation, author);
@@ -160,10 +227,14 @@ class QuranRepository {
     int authorId,
   ) async {
     try {
+      // Try API first
       final translationsData = await _api.getVerseTranslations(
         surahId,
         verseNumber,
       );
+
+      // Cache for offline use
+      await _cacheTranslations(surahId, verseNumber, translationsData);
 
       // Find the translation for the specified author
       final authorTranslation = translationsData.firstWhere(
@@ -174,20 +245,102 @@ class QuranRepository {
       if (authorTranslation.isEmpty) return null;
       return authorTranslation['text'] as String?;
     } catch (e) {
-      return null;
+      // Fallback to cache
+      final cached =
+          await (_db.select(_db.cachedTranslations)..where(
+                (t) =>
+                    t.surahId.equals(surahId) &
+                    t.verseNumber.equals(verseNumber) &
+                    t.authorId.equals(authorId),
+              ))
+              .getSingleOrNull();
+      return cached?.content;
     }
   }
 
   Future<List<VerseWord>> getVerseWords(int surahId, int verseNumber) async {
-    final wordsData = await _api.getVerseWords(surahId, verseNumber);
-    return wordsData.map<VerseWord>((data) {
+    try {
+      // Try API first
+      final wordsData = await _api.getVerseWords(surahId, verseNumber);
+      final results = wordsData.map<VerseWord>((data) {
+        return VerseWord(
+          arabic: data['arabic'] as String,
+          transcriptionTr: data['transcription_tr'] as String?,
+          transcriptionEn: data['transcription_en'] as String?,
+          translationTr: data['translation_tr'] as String?,
+          translationEn: data['translation_en'] as String?,
+          sortNumber: data['sort_number'] as int,
+        );
+      }).toList();
+
+      // Cache for offline use
+      await _cacheVerseWords(surahId, verseNumber, wordsData);
+
+      return results;
+    } catch (e) {
+      // Fallback to cache
+      return _getCachedVerseWords(surahId, verseNumber);
+    }
+  }
+
+  Future<void> _cacheVerseWords(
+    int surahId,
+    int verseNumber,
+    List<dynamic> wordsData,
+  ) async {
+    try {
+      // First delete existing cached words for this verse
+      await (_db.delete(_db.cachedVerseWords)..where(
+            (t) =>
+                t.surahId.equals(surahId) & t.verseNumber.equals(verseNumber),
+          ))
+          .go();
+
+      // Insert new words
+      await _db.batch((batch) {
+        batch.insertAll(
+          _db.cachedVerseWords,
+          wordsData.map(
+            (data) => CachedVerseWordsCompanion.insert(
+              surahId: surahId,
+              verseNumber: verseNumber,
+              arabic: data['arabic'] as String,
+              transcriptionTr: Value(data['transcription_tr'] as String?),
+              transcriptionEn: Value(data['transcription_en'] as String?),
+              translationTr: Value(data['translation_tr'] as String?),
+              translationEn: Value(data['translation_en'] as String?),
+              sortNumber: data['sort_number'] as int,
+            ),
+          ),
+        );
+      });
+    } catch (e) {
+      // Silently fail - caching is best-effort
+    }
+  }
+
+  Future<List<VerseWord>> _getCachedVerseWords(
+    int surahId,
+    int verseNumber,
+  ) async {
+    final cached =
+        await (_db.select(_db.cachedVerseWords)
+              ..where(
+                (t) =>
+                    t.surahId.equals(surahId) &
+                    t.verseNumber.equals(verseNumber),
+              )
+              ..orderBy([(t) => OrderingTerm.asc(t.sortNumber)]))
+            .get();
+
+    return cached.map((c) {
       return VerseWord(
-        arabic: data['arabic'] as String,
-        transcriptionTr: data['transcription_tr'] as String?,
-        transcriptionEn: data['transcription_en'] as String?,
-        translationTr: data['translation_tr'] as String?,
-        translationEn: data['translation_en'] as String?,
-        sortNumber: data['sort_number'] as int,
+        arabic: c.arabic,
+        transcriptionTr: c.transcriptionTr,
+        transcriptionEn: c.transcriptionEn,
+        translationTr: c.translationTr,
+        translationEn: c.translationEn,
+        sortNumber: c.sortNumber,
       );
     }).toList();
   }

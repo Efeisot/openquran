@@ -2361,6 +2361,1211 @@ class DownloadedTranslationsCompanion
   }
 }
 
+class $CachedTranslationsTable extends CachedTranslations
+    with TableInfo<$CachedTranslationsTable, CachedTranslation> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CachedTranslationsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _surahIdMeta = const VerificationMeta(
+    'surahId',
+  );
+  @override
+  late final GeneratedColumn<int> surahId = GeneratedColumn<int>(
+    'surah_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _verseNumberMeta = const VerificationMeta(
+    'verseNumber',
+  );
+  @override
+  late final GeneratedColumn<int> verseNumber = GeneratedColumn<int>(
+    'verse_number',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _authorIdMeta = const VerificationMeta(
+    'authorId',
+  );
+  @override
+  late final GeneratedColumn<int> authorId = GeneratedColumn<int>(
+    'author_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _authorNameMeta = const VerificationMeta(
+    'authorName',
+  );
+  @override
+  late final GeneratedColumn<String> authorName = GeneratedColumn<String>(
+    'author_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _authorDescriptionMeta = const VerificationMeta(
+    'authorDescription',
+  );
+  @override
+  late final GeneratedColumn<String> authorDescription =
+      GeneratedColumn<String>(
+        'author_description',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _authorLanguageMeta = const VerificationMeta(
+    'authorLanguage',
+  );
+  @override
+  late final GeneratedColumn<String> authorLanguage = GeneratedColumn<String>(
+    'author_language',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _contentMeta = const VerificationMeta(
+    'content',
+  );
+  @override
+  late final GeneratedColumn<String> content = GeneratedColumn<String>(
+    'content',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _cachedAtMeta = const VerificationMeta(
+    'cachedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> cachedAt = GeneratedColumn<DateTime>(
+    'cached_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    surahId,
+    verseNumber,
+    authorId,
+    authorName,
+    authorDescription,
+    authorLanguage,
+    content,
+    cachedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'cached_translations';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CachedTranslation> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('surah_id')) {
+      context.handle(
+        _surahIdMeta,
+        surahId.isAcceptableOrUnknown(data['surah_id']!, _surahIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_surahIdMeta);
+    }
+    if (data.containsKey('verse_number')) {
+      context.handle(
+        _verseNumberMeta,
+        verseNumber.isAcceptableOrUnknown(
+          data['verse_number']!,
+          _verseNumberMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_verseNumberMeta);
+    }
+    if (data.containsKey('author_id')) {
+      context.handle(
+        _authorIdMeta,
+        authorId.isAcceptableOrUnknown(data['author_id']!, _authorIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_authorIdMeta);
+    }
+    if (data.containsKey('author_name')) {
+      context.handle(
+        _authorNameMeta,
+        authorName.isAcceptableOrUnknown(data['author_name']!, _authorNameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_authorNameMeta);
+    }
+    if (data.containsKey('author_description')) {
+      context.handle(
+        _authorDescriptionMeta,
+        authorDescription.isAcceptableOrUnknown(
+          data['author_description']!,
+          _authorDescriptionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('author_language')) {
+      context.handle(
+        _authorLanguageMeta,
+        authorLanguage.isAcceptableOrUnknown(
+          data['author_language']!,
+          _authorLanguageMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_authorLanguageMeta);
+    }
+    if (data.containsKey('content')) {
+      context.handle(
+        _contentMeta,
+        content.isAcceptableOrUnknown(data['content']!, _contentMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_contentMeta);
+    }
+    if (data.containsKey('cached_at')) {
+      context.handle(
+        _cachedAtMeta,
+        cachedAt.isAcceptableOrUnknown(data['cached_at']!, _cachedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CachedTranslation map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CachedTranslation(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      surahId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}surah_id'],
+      )!,
+      verseNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}verse_number'],
+      )!,
+      authorId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}author_id'],
+      )!,
+      authorName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}author_name'],
+      )!,
+      authorDescription: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}author_description'],
+      ),
+      authorLanguage: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}author_language'],
+      )!,
+      content: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}content'],
+      )!,
+      cachedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}cached_at'],
+      )!,
+    );
+  }
+
+  @override
+  $CachedTranslationsTable createAlias(String alias) {
+    return $CachedTranslationsTable(attachedDatabase, alias);
+  }
+}
+
+class CachedTranslation extends DataClass
+    implements Insertable<CachedTranslation> {
+  final int id;
+  final int surahId;
+  final int verseNumber;
+  final int authorId;
+  final String authorName;
+  final String? authorDescription;
+  final String authorLanguage;
+  final String content;
+  final DateTime cachedAt;
+  const CachedTranslation({
+    required this.id,
+    required this.surahId,
+    required this.verseNumber,
+    required this.authorId,
+    required this.authorName,
+    this.authorDescription,
+    required this.authorLanguage,
+    required this.content,
+    required this.cachedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['surah_id'] = Variable<int>(surahId);
+    map['verse_number'] = Variable<int>(verseNumber);
+    map['author_id'] = Variable<int>(authorId);
+    map['author_name'] = Variable<String>(authorName);
+    if (!nullToAbsent || authorDescription != null) {
+      map['author_description'] = Variable<String>(authorDescription);
+    }
+    map['author_language'] = Variable<String>(authorLanguage);
+    map['content'] = Variable<String>(content);
+    map['cached_at'] = Variable<DateTime>(cachedAt);
+    return map;
+  }
+
+  CachedTranslationsCompanion toCompanion(bool nullToAbsent) {
+    return CachedTranslationsCompanion(
+      id: Value(id),
+      surahId: Value(surahId),
+      verseNumber: Value(verseNumber),
+      authorId: Value(authorId),
+      authorName: Value(authorName),
+      authorDescription: authorDescription == null && nullToAbsent
+          ? const Value.absent()
+          : Value(authorDescription),
+      authorLanguage: Value(authorLanguage),
+      content: Value(content),
+      cachedAt: Value(cachedAt),
+    );
+  }
+
+  factory CachedTranslation.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CachedTranslation(
+      id: serializer.fromJson<int>(json['id']),
+      surahId: serializer.fromJson<int>(json['surahId']),
+      verseNumber: serializer.fromJson<int>(json['verseNumber']),
+      authorId: serializer.fromJson<int>(json['authorId']),
+      authorName: serializer.fromJson<String>(json['authorName']),
+      authorDescription: serializer.fromJson<String?>(
+        json['authorDescription'],
+      ),
+      authorLanguage: serializer.fromJson<String>(json['authorLanguage']),
+      content: serializer.fromJson<String>(json['content']),
+      cachedAt: serializer.fromJson<DateTime>(json['cachedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'surahId': serializer.toJson<int>(surahId),
+      'verseNumber': serializer.toJson<int>(verseNumber),
+      'authorId': serializer.toJson<int>(authorId),
+      'authorName': serializer.toJson<String>(authorName),
+      'authorDescription': serializer.toJson<String?>(authorDescription),
+      'authorLanguage': serializer.toJson<String>(authorLanguage),
+      'content': serializer.toJson<String>(content),
+      'cachedAt': serializer.toJson<DateTime>(cachedAt),
+    };
+  }
+
+  CachedTranslation copyWith({
+    int? id,
+    int? surahId,
+    int? verseNumber,
+    int? authorId,
+    String? authorName,
+    Value<String?> authorDescription = const Value.absent(),
+    String? authorLanguage,
+    String? content,
+    DateTime? cachedAt,
+  }) => CachedTranslation(
+    id: id ?? this.id,
+    surahId: surahId ?? this.surahId,
+    verseNumber: verseNumber ?? this.verseNumber,
+    authorId: authorId ?? this.authorId,
+    authorName: authorName ?? this.authorName,
+    authorDescription: authorDescription.present
+        ? authorDescription.value
+        : this.authorDescription,
+    authorLanguage: authorLanguage ?? this.authorLanguage,
+    content: content ?? this.content,
+    cachedAt: cachedAt ?? this.cachedAt,
+  );
+  CachedTranslation copyWithCompanion(CachedTranslationsCompanion data) {
+    return CachedTranslation(
+      id: data.id.present ? data.id.value : this.id,
+      surahId: data.surahId.present ? data.surahId.value : this.surahId,
+      verseNumber: data.verseNumber.present
+          ? data.verseNumber.value
+          : this.verseNumber,
+      authorId: data.authorId.present ? data.authorId.value : this.authorId,
+      authorName: data.authorName.present
+          ? data.authorName.value
+          : this.authorName,
+      authorDescription: data.authorDescription.present
+          ? data.authorDescription.value
+          : this.authorDescription,
+      authorLanguage: data.authorLanguage.present
+          ? data.authorLanguage.value
+          : this.authorLanguage,
+      content: data.content.present ? data.content.value : this.content,
+      cachedAt: data.cachedAt.present ? data.cachedAt.value : this.cachedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CachedTranslation(')
+          ..write('id: $id, ')
+          ..write('surahId: $surahId, ')
+          ..write('verseNumber: $verseNumber, ')
+          ..write('authorId: $authorId, ')
+          ..write('authorName: $authorName, ')
+          ..write('authorDescription: $authorDescription, ')
+          ..write('authorLanguage: $authorLanguage, ')
+          ..write('content: $content, ')
+          ..write('cachedAt: $cachedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    surahId,
+    verseNumber,
+    authorId,
+    authorName,
+    authorDescription,
+    authorLanguage,
+    content,
+    cachedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CachedTranslation &&
+          other.id == this.id &&
+          other.surahId == this.surahId &&
+          other.verseNumber == this.verseNumber &&
+          other.authorId == this.authorId &&
+          other.authorName == this.authorName &&
+          other.authorDescription == this.authorDescription &&
+          other.authorLanguage == this.authorLanguage &&
+          other.content == this.content &&
+          other.cachedAt == this.cachedAt);
+}
+
+class CachedTranslationsCompanion extends UpdateCompanion<CachedTranslation> {
+  final Value<int> id;
+  final Value<int> surahId;
+  final Value<int> verseNumber;
+  final Value<int> authorId;
+  final Value<String> authorName;
+  final Value<String?> authorDescription;
+  final Value<String> authorLanguage;
+  final Value<String> content;
+  final Value<DateTime> cachedAt;
+  const CachedTranslationsCompanion({
+    this.id = const Value.absent(),
+    this.surahId = const Value.absent(),
+    this.verseNumber = const Value.absent(),
+    this.authorId = const Value.absent(),
+    this.authorName = const Value.absent(),
+    this.authorDescription = const Value.absent(),
+    this.authorLanguage = const Value.absent(),
+    this.content = const Value.absent(),
+    this.cachedAt = const Value.absent(),
+  });
+  CachedTranslationsCompanion.insert({
+    this.id = const Value.absent(),
+    required int surahId,
+    required int verseNumber,
+    required int authorId,
+    required String authorName,
+    this.authorDescription = const Value.absent(),
+    required String authorLanguage,
+    required String content,
+    this.cachedAt = const Value.absent(),
+  }) : surahId = Value(surahId),
+       verseNumber = Value(verseNumber),
+       authorId = Value(authorId),
+       authorName = Value(authorName),
+       authorLanguage = Value(authorLanguage),
+       content = Value(content);
+  static Insertable<CachedTranslation> custom({
+    Expression<int>? id,
+    Expression<int>? surahId,
+    Expression<int>? verseNumber,
+    Expression<int>? authorId,
+    Expression<String>? authorName,
+    Expression<String>? authorDescription,
+    Expression<String>? authorLanguage,
+    Expression<String>? content,
+    Expression<DateTime>? cachedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (surahId != null) 'surah_id': surahId,
+      if (verseNumber != null) 'verse_number': verseNumber,
+      if (authorId != null) 'author_id': authorId,
+      if (authorName != null) 'author_name': authorName,
+      if (authorDescription != null) 'author_description': authorDescription,
+      if (authorLanguage != null) 'author_language': authorLanguage,
+      if (content != null) 'content': content,
+      if (cachedAt != null) 'cached_at': cachedAt,
+    });
+  }
+
+  CachedTranslationsCompanion copyWith({
+    Value<int>? id,
+    Value<int>? surahId,
+    Value<int>? verseNumber,
+    Value<int>? authorId,
+    Value<String>? authorName,
+    Value<String?>? authorDescription,
+    Value<String>? authorLanguage,
+    Value<String>? content,
+    Value<DateTime>? cachedAt,
+  }) {
+    return CachedTranslationsCompanion(
+      id: id ?? this.id,
+      surahId: surahId ?? this.surahId,
+      verseNumber: verseNumber ?? this.verseNumber,
+      authorId: authorId ?? this.authorId,
+      authorName: authorName ?? this.authorName,
+      authorDescription: authorDescription ?? this.authorDescription,
+      authorLanguage: authorLanguage ?? this.authorLanguage,
+      content: content ?? this.content,
+      cachedAt: cachedAt ?? this.cachedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (surahId.present) {
+      map['surah_id'] = Variable<int>(surahId.value);
+    }
+    if (verseNumber.present) {
+      map['verse_number'] = Variable<int>(verseNumber.value);
+    }
+    if (authorId.present) {
+      map['author_id'] = Variable<int>(authorId.value);
+    }
+    if (authorName.present) {
+      map['author_name'] = Variable<String>(authorName.value);
+    }
+    if (authorDescription.present) {
+      map['author_description'] = Variable<String>(authorDescription.value);
+    }
+    if (authorLanguage.present) {
+      map['author_language'] = Variable<String>(authorLanguage.value);
+    }
+    if (content.present) {
+      map['content'] = Variable<String>(content.value);
+    }
+    if (cachedAt.present) {
+      map['cached_at'] = Variable<DateTime>(cachedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CachedTranslationsCompanion(')
+          ..write('id: $id, ')
+          ..write('surahId: $surahId, ')
+          ..write('verseNumber: $verseNumber, ')
+          ..write('authorId: $authorId, ')
+          ..write('authorName: $authorName, ')
+          ..write('authorDescription: $authorDescription, ')
+          ..write('authorLanguage: $authorLanguage, ')
+          ..write('content: $content, ')
+          ..write('cachedAt: $cachedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $CachedVerseWordsTable extends CachedVerseWords
+    with TableInfo<$CachedVerseWordsTable, CachedVerseWord> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CachedVerseWordsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _surahIdMeta = const VerificationMeta(
+    'surahId',
+  );
+  @override
+  late final GeneratedColumn<int> surahId = GeneratedColumn<int>(
+    'surah_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _verseNumberMeta = const VerificationMeta(
+    'verseNumber',
+  );
+  @override
+  late final GeneratedColumn<int> verseNumber = GeneratedColumn<int>(
+    'verse_number',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _arabicMeta = const VerificationMeta('arabic');
+  @override
+  late final GeneratedColumn<String> arabic = GeneratedColumn<String>(
+    'arabic',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _transcriptionTrMeta = const VerificationMeta(
+    'transcriptionTr',
+  );
+  @override
+  late final GeneratedColumn<String> transcriptionTr = GeneratedColumn<String>(
+    'transcription_tr',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _transcriptionEnMeta = const VerificationMeta(
+    'transcriptionEn',
+  );
+  @override
+  late final GeneratedColumn<String> transcriptionEn = GeneratedColumn<String>(
+    'transcription_en',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _translationTrMeta = const VerificationMeta(
+    'translationTr',
+  );
+  @override
+  late final GeneratedColumn<String> translationTr = GeneratedColumn<String>(
+    'translation_tr',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _translationEnMeta = const VerificationMeta(
+    'translationEn',
+  );
+  @override
+  late final GeneratedColumn<String> translationEn = GeneratedColumn<String>(
+    'translation_en',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sortNumberMeta = const VerificationMeta(
+    'sortNumber',
+  );
+  @override
+  late final GeneratedColumn<int> sortNumber = GeneratedColumn<int>(
+    'sort_number',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _cachedAtMeta = const VerificationMeta(
+    'cachedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> cachedAt = GeneratedColumn<DateTime>(
+    'cached_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    surahId,
+    verseNumber,
+    arabic,
+    transcriptionTr,
+    transcriptionEn,
+    translationTr,
+    translationEn,
+    sortNumber,
+    cachedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'cached_verse_words';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CachedVerseWord> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('surah_id')) {
+      context.handle(
+        _surahIdMeta,
+        surahId.isAcceptableOrUnknown(data['surah_id']!, _surahIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_surahIdMeta);
+    }
+    if (data.containsKey('verse_number')) {
+      context.handle(
+        _verseNumberMeta,
+        verseNumber.isAcceptableOrUnknown(
+          data['verse_number']!,
+          _verseNumberMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_verseNumberMeta);
+    }
+    if (data.containsKey('arabic')) {
+      context.handle(
+        _arabicMeta,
+        arabic.isAcceptableOrUnknown(data['arabic']!, _arabicMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_arabicMeta);
+    }
+    if (data.containsKey('transcription_tr')) {
+      context.handle(
+        _transcriptionTrMeta,
+        transcriptionTr.isAcceptableOrUnknown(
+          data['transcription_tr']!,
+          _transcriptionTrMeta,
+        ),
+      );
+    }
+    if (data.containsKey('transcription_en')) {
+      context.handle(
+        _transcriptionEnMeta,
+        transcriptionEn.isAcceptableOrUnknown(
+          data['transcription_en']!,
+          _transcriptionEnMeta,
+        ),
+      );
+    }
+    if (data.containsKey('translation_tr')) {
+      context.handle(
+        _translationTrMeta,
+        translationTr.isAcceptableOrUnknown(
+          data['translation_tr']!,
+          _translationTrMeta,
+        ),
+      );
+    }
+    if (data.containsKey('translation_en')) {
+      context.handle(
+        _translationEnMeta,
+        translationEn.isAcceptableOrUnknown(
+          data['translation_en']!,
+          _translationEnMeta,
+        ),
+      );
+    }
+    if (data.containsKey('sort_number')) {
+      context.handle(
+        _sortNumberMeta,
+        sortNumber.isAcceptableOrUnknown(data['sort_number']!, _sortNumberMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sortNumberMeta);
+    }
+    if (data.containsKey('cached_at')) {
+      context.handle(
+        _cachedAtMeta,
+        cachedAt.isAcceptableOrUnknown(data['cached_at']!, _cachedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CachedVerseWord map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CachedVerseWord(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      surahId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}surah_id'],
+      )!,
+      verseNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}verse_number'],
+      )!,
+      arabic: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}arabic'],
+      )!,
+      transcriptionTr: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}transcription_tr'],
+      ),
+      transcriptionEn: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}transcription_en'],
+      ),
+      translationTr: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}translation_tr'],
+      ),
+      translationEn: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}translation_en'],
+      ),
+      sortNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sort_number'],
+      )!,
+      cachedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}cached_at'],
+      )!,
+    );
+  }
+
+  @override
+  $CachedVerseWordsTable createAlias(String alias) {
+    return $CachedVerseWordsTable(attachedDatabase, alias);
+  }
+}
+
+class CachedVerseWord extends DataClass implements Insertable<CachedVerseWord> {
+  final int id;
+  final int surahId;
+  final int verseNumber;
+  final String arabic;
+  final String? transcriptionTr;
+  final String? transcriptionEn;
+  final String? translationTr;
+  final String? translationEn;
+  final int sortNumber;
+  final DateTime cachedAt;
+  const CachedVerseWord({
+    required this.id,
+    required this.surahId,
+    required this.verseNumber,
+    required this.arabic,
+    this.transcriptionTr,
+    this.transcriptionEn,
+    this.translationTr,
+    this.translationEn,
+    required this.sortNumber,
+    required this.cachedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['surah_id'] = Variable<int>(surahId);
+    map['verse_number'] = Variable<int>(verseNumber);
+    map['arabic'] = Variable<String>(arabic);
+    if (!nullToAbsent || transcriptionTr != null) {
+      map['transcription_tr'] = Variable<String>(transcriptionTr);
+    }
+    if (!nullToAbsent || transcriptionEn != null) {
+      map['transcription_en'] = Variable<String>(transcriptionEn);
+    }
+    if (!nullToAbsent || translationTr != null) {
+      map['translation_tr'] = Variable<String>(translationTr);
+    }
+    if (!nullToAbsent || translationEn != null) {
+      map['translation_en'] = Variable<String>(translationEn);
+    }
+    map['sort_number'] = Variable<int>(sortNumber);
+    map['cached_at'] = Variable<DateTime>(cachedAt);
+    return map;
+  }
+
+  CachedVerseWordsCompanion toCompanion(bool nullToAbsent) {
+    return CachedVerseWordsCompanion(
+      id: Value(id),
+      surahId: Value(surahId),
+      verseNumber: Value(verseNumber),
+      arabic: Value(arabic),
+      transcriptionTr: transcriptionTr == null && nullToAbsent
+          ? const Value.absent()
+          : Value(transcriptionTr),
+      transcriptionEn: transcriptionEn == null && nullToAbsent
+          ? const Value.absent()
+          : Value(transcriptionEn),
+      translationTr: translationTr == null && nullToAbsent
+          ? const Value.absent()
+          : Value(translationTr),
+      translationEn: translationEn == null && nullToAbsent
+          ? const Value.absent()
+          : Value(translationEn),
+      sortNumber: Value(sortNumber),
+      cachedAt: Value(cachedAt),
+    );
+  }
+
+  factory CachedVerseWord.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CachedVerseWord(
+      id: serializer.fromJson<int>(json['id']),
+      surahId: serializer.fromJson<int>(json['surahId']),
+      verseNumber: serializer.fromJson<int>(json['verseNumber']),
+      arabic: serializer.fromJson<String>(json['arabic']),
+      transcriptionTr: serializer.fromJson<String?>(json['transcriptionTr']),
+      transcriptionEn: serializer.fromJson<String?>(json['transcriptionEn']),
+      translationTr: serializer.fromJson<String?>(json['translationTr']),
+      translationEn: serializer.fromJson<String?>(json['translationEn']),
+      sortNumber: serializer.fromJson<int>(json['sortNumber']),
+      cachedAt: serializer.fromJson<DateTime>(json['cachedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'surahId': serializer.toJson<int>(surahId),
+      'verseNumber': serializer.toJson<int>(verseNumber),
+      'arabic': serializer.toJson<String>(arabic),
+      'transcriptionTr': serializer.toJson<String?>(transcriptionTr),
+      'transcriptionEn': serializer.toJson<String?>(transcriptionEn),
+      'translationTr': serializer.toJson<String?>(translationTr),
+      'translationEn': serializer.toJson<String?>(translationEn),
+      'sortNumber': serializer.toJson<int>(sortNumber),
+      'cachedAt': serializer.toJson<DateTime>(cachedAt),
+    };
+  }
+
+  CachedVerseWord copyWith({
+    int? id,
+    int? surahId,
+    int? verseNumber,
+    String? arabic,
+    Value<String?> transcriptionTr = const Value.absent(),
+    Value<String?> transcriptionEn = const Value.absent(),
+    Value<String?> translationTr = const Value.absent(),
+    Value<String?> translationEn = const Value.absent(),
+    int? sortNumber,
+    DateTime? cachedAt,
+  }) => CachedVerseWord(
+    id: id ?? this.id,
+    surahId: surahId ?? this.surahId,
+    verseNumber: verseNumber ?? this.verseNumber,
+    arabic: arabic ?? this.arabic,
+    transcriptionTr: transcriptionTr.present
+        ? transcriptionTr.value
+        : this.transcriptionTr,
+    transcriptionEn: transcriptionEn.present
+        ? transcriptionEn.value
+        : this.transcriptionEn,
+    translationTr: translationTr.present
+        ? translationTr.value
+        : this.translationTr,
+    translationEn: translationEn.present
+        ? translationEn.value
+        : this.translationEn,
+    sortNumber: sortNumber ?? this.sortNumber,
+    cachedAt: cachedAt ?? this.cachedAt,
+  );
+  CachedVerseWord copyWithCompanion(CachedVerseWordsCompanion data) {
+    return CachedVerseWord(
+      id: data.id.present ? data.id.value : this.id,
+      surahId: data.surahId.present ? data.surahId.value : this.surahId,
+      verseNumber: data.verseNumber.present
+          ? data.verseNumber.value
+          : this.verseNumber,
+      arabic: data.arabic.present ? data.arabic.value : this.arabic,
+      transcriptionTr: data.transcriptionTr.present
+          ? data.transcriptionTr.value
+          : this.transcriptionTr,
+      transcriptionEn: data.transcriptionEn.present
+          ? data.transcriptionEn.value
+          : this.transcriptionEn,
+      translationTr: data.translationTr.present
+          ? data.translationTr.value
+          : this.translationTr,
+      translationEn: data.translationEn.present
+          ? data.translationEn.value
+          : this.translationEn,
+      sortNumber: data.sortNumber.present
+          ? data.sortNumber.value
+          : this.sortNumber,
+      cachedAt: data.cachedAt.present ? data.cachedAt.value : this.cachedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CachedVerseWord(')
+          ..write('id: $id, ')
+          ..write('surahId: $surahId, ')
+          ..write('verseNumber: $verseNumber, ')
+          ..write('arabic: $arabic, ')
+          ..write('transcriptionTr: $transcriptionTr, ')
+          ..write('transcriptionEn: $transcriptionEn, ')
+          ..write('translationTr: $translationTr, ')
+          ..write('translationEn: $translationEn, ')
+          ..write('sortNumber: $sortNumber, ')
+          ..write('cachedAt: $cachedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    surahId,
+    verseNumber,
+    arabic,
+    transcriptionTr,
+    transcriptionEn,
+    translationTr,
+    translationEn,
+    sortNumber,
+    cachedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CachedVerseWord &&
+          other.id == this.id &&
+          other.surahId == this.surahId &&
+          other.verseNumber == this.verseNumber &&
+          other.arabic == this.arabic &&
+          other.transcriptionTr == this.transcriptionTr &&
+          other.transcriptionEn == this.transcriptionEn &&
+          other.translationTr == this.translationTr &&
+          other.translationEn == this.translationEn &&
+          other.sortNumber == this.sortNumber &&
+          other.cachedAt == this.cachedAt);
+}
+
+class CachedVerseWordsCompanion extends UpdateCompanion<CachedVerseWord> {
+  final Value<int> id;
+  final Value<int> surahId;
+  final Value<int> verseNumber;
+  final Value<String> arabic;
+  final Value<String?> transcriptionTr;
+  final Value<String?> transcriptionEn;
+  final Value<String?> translationTr;
+  final Value<String?> translationEn;
+  final Value<int> sortNumber;
+  final Value<DateTime> cachedAt;
+  const CachedVerseWordsCompanion({
+    this.id = const Value.absent(),
+    this.surahId = const Value.absent(),
+    this.verseNumber = const Value.absent(),
+    this.arabic = const Value.absent(),
+    this.transcriptionTr = const Value.absent(),
+    this.transcriptionEn = const Value.absent(),
+    this.translationTr = const Value.absent(),
+    this.translationEn = const Value.absent(),
+    this.sortNumber = const Value.absent(),
+    this.cachedAt = const Value.absent(),
+  });
+  CachedVerseWordsCompanion.insert({
+    this.id = const Value.absent(),
+    required int surahId,
+    required int verseNumber,
+    required String arabic,
+    this.transcriptionTr = const Value.absent(),
+    this.transcriptionEn = const Value.absent(),
+    this.translationTr = const Value.absent(),
+    this.translationEn = const Value.absent(),
+    required int sortNumber,
+    this.cachedAt = const Value.absent(),
+  }) : surahId = Value(surahId),
+       verseNumber = Value(verseNumber),
+       arabic = Value(arabic),
+       sortNumber = Value(sortNumber);
+  static Insertable<CachedVerseWord> custom({
+    Expression<int>? id,
+    Expression<int>? surahId,
+    Expression<int>? verseNumber,
+    Expression<String>? arabic,
+    Expression<String>? transcriptionTr,
+    Expression<String>? transcriptionEn,
+    Expression<String>? translationTr,
+    Expression<String>? translationEn,
+    Expression<int>? sortNumber,
+    Expression<DateTime>? cachedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (surahId != null) 'surah_id': surahId,
+      if (verseNumber != null) 'verse_number': verseNumber,
+      if (arabic != null) 'arabic': arabic,
+      if (transcriptionTr != null) 'transcription_tr': transcriptionTr,
+      if (transcriptionEn != null) 'transcription_en': transcriptionEn,
+      if (translationTr != null) 'translation_tr': translationTr,
+      if (translationEn != null) 'translation_en': translationEn,
+      if (sortNumber != null) 'sort_number': sortNumber,
+      if (cachedAt != null) 'cached_at': cachedAt,
+    });
+  }
+
+  CachedVerseWordsCompanion copyWith({
+    Value<int>? id,
+    Value<int>? surahId,
+    Value<int>? verseNumber,
+    Value<String>? arabic,
+    Value<String?>? transcriptionTr,
+    Value<String?>? transcriptionEn,
+    Value<String?>? translationTr,
+    Value<String?>? translationEn,
+    Value<int>? sortNumber,
+    Value<DateTime>? cachedAt,
+  }) {
+    return CachedVerseWordsCompanion(
+      id: id ?? this.id,
+      surahId: surahId ?? this.surahId,
+      verseNumber: verseNumber ?? this.verseNumber,
+      arabic: arabic ?? this.arabic,
+      transcriptionTr: transcriptionTr ?? this.transcriptionTr,
+      transcriptionEn: transcriptionEn ?? this.transcriptionEn,
+      translationTr: translationTr ?? this.translationTr,
+      translationEn: translationEn ?? this.translationEn,
+      sortNumber: sortNumber ?? this.sortNumber,
+      cachedAt: cachedAt ?? this.cachedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (surahId.present) {
+      map['surah_id'] = Variable<int>(surahId.value);
+    }
+    if (verseNumber.present) {
+      map['verse_number'] = Variable<int>(verseNumber.value);
+    }
+    if (arabic.present) {
+      map['arabic'] = Variable<String>(arabic.value);
+    }
+    if (transcriptionTr.present) {
+      map['transcription_tr'] = Variable<String>(transcriptionTr.value);
+    }
+    if (transcriptionEn.present) {
+      map['transcription_en'] = Variable<String>(transcriptionEn.value);
+    }
+    if (translationTr.present) {
+      map['translation_tr'] = Variable<String>(translationTr.value);
+    }
+    if (translationEn.present) {
+      map['translation_en'] = Variable<String>(translationEn.value);
+    }
+    if (sortNumber.present) {
+      map['sort_number'] = Variable<int>(sortNumber.value);
+    }
+    if (cachedAt.present) {
+      map['cached_at'] = Variable<DateTime>(cachedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CachedVerseWordsCompanion(')
+          ..write('id: $id, ')
+          ..write('surahId: $surahId, ')
+          ..write('verseNumber: $verseNumber, ')
+          ..write('arabic: $arabic, ')
+          ..write('transcriptionTr: $transcriptionTr, ')
+          ..write('transcriptionEn: $transcriptionEn, ')
+          ..write('translationTr: $translationTr, ')
+          ..write('translationEn: $translationEn, ')
+          ..write('sortNumber: $sortNumber, ')
+          ..write('cachedAt: $cachedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2371,6 +3576,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $NotesTable notes = $NotesTable(this);
   late final $DownloadedTranslationsTable downloadedTranslations =
       $DownloadedTranslationsTable(this);
+  late final $CachedTranslationsTable cachedTranslations =
+      $CachedTranslationsTable(this);
+  late final $CachedVerseWordsTable cachedVerseWords = $CachedVerseWordsTable(
+    this,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2382,6 +3592,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     translations,
     notes,
     downloadedTranslations,
+    cachedTranslations,
+    cachedVerseWords,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -4503,6 +5715,604 @@ typedef $$DownloadedTranslationsTableProcessedTableManager =
       DownloadedTranslation,
       PrefetchHooks Function({bool authorId})
     >;
+typedef $$CachedTranslationsTableCreateCompanionBuilder =
+    CachedTranslationsCompanion Function({
+      Value<int> id,
+      required int surahId,
+      required int verseNumber,
+      required int authorId,
+      required String authorName,
+      Value<String?> authorDescription,
+      required String authorLanguage,
+      required String content,
+      Value<DateTime> cachedAt,
+    });
+typedef $$CachedTranslationsTableUpdateCompanionBuilder =
+    CachedTranslationsCompanion Function({
+      Value<int> id,
+      Value<int> surahId,
+      Value<int> verseNumber,
+      Value<int> authorId,
+      Value<String> authorName,
+      Value<String?> authorDescription,
+      Value<String> authorLanguage,
+      Value<String> content,
+      Value<DateTime> cachedAt,
+    });
+
+class $$CachedTranslationsTableFilterComposer
+    extends Composer<_$AppDatabase, $CachedTranslationsTable> {
+  $$CachedTranslationsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get surahId => $composableBuilder(
+    column: $table.surahId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get verseNumber => $composableBuilder(
+    column: $table.verseNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get authorId => $composableBuilder(
+    column: $table.authorId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get authorName => $composableBuilder(
+    column: $table.authorName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get authorDescription => $composableBuilder(
+    column: $table.authorDescription,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get authorLanguage => $composableBuilder(
+    column: $table.authorLanguage,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get content => $composableBuilder(
+    column: $table.content,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get cachedAt => $composableBuilder(
+    column: $table.cachedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$CachedTranslationsTableOrderingComposer
+    extends Composer<_$AppDatabase, $CachedTranslationsTable> {
+  $$CachedTranslationsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get surahId => $composableBuilder(
+    column: $table.surahId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get verseNumber => $composableBuilder(
+    column: $table.verseNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get authorId => $composableBuilder(
+    column: $table.authorId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get authorName => $composableBuilder(
+    column: $table.authorName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get authorDescription => $composableBuilder(
+    column: $table.authorDescription,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get authorLanguage => $composableBuilder(
+    column: $table.authorLanguage,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get content => $composableBuilder(
+    column: $table.content,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get cachedAt => $composableBuilder(
+    column: $table.cachedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$CachedTranslationsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CachedTranslationsTable> {
+  $$CachedTranslationsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get surahId =>
+      $composableBuilder(column: $table.surahId, builder: (column) => column);
+
+  GeneratedColumn<int> get verseNumber => $composableBuilder(
+    column: $table.verseNumber,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get authorId =>
+      $composableBuilder(column: $table.authorId, builder: (column) => column);
+
+  GeneratedColumn<String> get authorName => $composableBuilder(
+    column: $table.authorName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get authorDescription => $composableBuilder(
+    column: $table.authorDescription,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get authorLanguage => $composableBuilder(
+    column: $table.authorLanguage,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get content =>
+      $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get cachedAt =>
+      $composableBuilder(column: $table.cachedAt, builder: (column) => column);
+}
+
+class $$CachedTranslationsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CachedTranslationsTable,
+          CachedTranslation,
+          $$CachedTranslationsTableFilterComposer,
+          $$CachedTranslationsTableOrderingComposer,
+          $$CachedTranslationsTableAnnotationComposer,
+          $$CachedTranslationsTableCreateCompanionBuilder,
+          $$CachedTranslationsTableUpdateCompanionBuilder,
+          (
+            CachedTranslation,
+            BaseReferences<
+              _$AppDatabase,
+              $CachedTranslationsTable,
+              CachedTranslation
+            >,
+          ),
+          CachedTranslation,
+          PrefetchHooks Function()
+        > {
+  $$CachedTranslationsTableTableManager(
+    _$AppDatabase db,
+    $CachedTranslationsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CachedTranslationsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CachedTranslationsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CachedTranslationsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> surahId = const Value.absent(),
+                Value<int> verseNumber = const Value.absent(),
+                Value<int> authorId = const Value.absent(),
+                Value<String> authorName = const Value.absent(),
+                Value<String?> authorDescription = const Value.absent(),
+                Value<String> authorLanguage = const Value.absent(),
+                Value<String> content = const Value.absent(),
+                Value<DateTime> cachedAt = const Value.absent(),
+              }) => CachedTranslationsCompanion(
+                id: id,
+                surahId: surahId,
+                verseNumber: verseNumber,
+                authorId: authorId,
+                authorName: authorName,
+                authorDescription: authorDescription,
+                authorLanguage: authorLanguage,
+                content: content,
+                cachedAt: cachedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int surahId,
+                required int verseNumber,
+                required int authorId,
+                required String authorName,
+                Value<String?> authorDescription = const Value.absent(),
+                required String authorLanguage,
+                required String content,
+                Value<DateTime> cachedAt = const Value.absent(),
+              }) => CachedTranslationsCompanion.insert(
+                id: id,
+                surahId: surahId,
+                verseNumber: verseNumber,
+                authorId: authorId,
+                authorName: authorName,
+                authorDescription: authorDescription,
+                authorLanguage: authorLanguage,
+                content: content,
+                cachedAt: cachedAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$CachedTranslationsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CachedTranslationsTable,
+      CachedTranslation,
+      $$CachedTranslationsTableFilterComposer,
+      $$CachedTranslationsTableOrderingComposer,
+      $$CachedTranslationsTableAnnotationComposer,
+      $$CachedTranslationsTableCreateCompanionBuilder,
+      $$CachedTranslationsTableUpdateCompanionBuilder,
+      (
+        CachedTranslation,
+        BaseReferences<
+          _$AppDatabase,
+          $CachedTranslationsTable,
+          CachedTranslation
+        >,
+      ),
+      CachedTranslation,
+      PrefetchHooks Function()
+    >;
+typedef $$CachedVerseWordsTableCreateCompanionBuilder =
+    CachedVerseWordsCompanion Function({
+      Value<int> id,
+      required int surahId,
+      required int verseNumber,
+      required String arabic,
+      Value<String?> transcriptionTr,
+      Value<String?> transcriptionEn,
+      Value<String?> translationTr,
+      Value<String?> translationEn,
+      required int sortNumber,
+      Value<DateTime> cachedAt,
+    });
+typedef $$CachedVerseWordsTableUpdateCompanionBuilder =
+    CachedVerseWordsCompanion Function({
+      Value<int> id,
+      Value<int> surahId,
+      Value<int> verseNumber,
+      Value<String> arabic,
+      Value<String?> transcriptionTr,
+      Value<String?> transcriptionEn,
+      Value<String?> translationTr,
+      Value<String?> translationEn,
+      Value<int> sortNumber,
+      Value<DateTime> cachedAt,
+    });
+
+class $$CachedVerseWordsTableFilterComposer
+    extends Composer<_$AppDatabase, $CachedVerseWordsTable> {
+  $$CachedVerseWordsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get surahId => $composableBuilder(
+    column: $table.surahId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get verseNumber => $composableBuilder(
+    column: $table.verseNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get arabic => $composableBuilder(
+    column: $table.arabic,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get transcriptionTr => $composableBuilder(
+    column: $table.transcriptionTr,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get transcriptionEn => $composableBuilder(
+    column: $table.transcriptionEn,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get translationTr => $composableBuilder(
+    column: $table.translationTr,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get translationEn => $composableBuilder(
+    column: $table.translationEn,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sortNumber => $composableBuilder(
+    column: $table.sortNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get cachedAt => $composableBuilder(
+    column: $table.cachedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$CachedVerseWordsTableOrderingComposer
+    extends Composer<_$AppDatabase, $CachedVerseWordsTable> {
+  $$CachedVerseWordsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get surahId => $composableBuilder(
+    column: $table.surahId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get verseNumber => $composableBuilder(
+    column: $table.verseNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get arabic => $composableBuilder(
+    column: $table.arabic,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get transcriptionTr => $composableBuilder(
+    column: $table.transcriptionTr,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get transcriptionEn => $composableBuilder(
+    column: $table.transcriptionEn,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get translationTr => $composableBuilder(
+    column: $table.translationTr,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get translationEn => $composableBuilder(
+    column: $table.translationEn,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sortNumber => $composableBuilder(
+    column: $table.sortNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get cachedAt => $composableBuilder(
+    column: $table.cachedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$CachedVerseWordsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CachedVerseWordsTable> {
+  $$CachedVerseWordsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get surahId =>
+      $composableBuilder(column: $table.surahId, builder: (column) => column);
+
+  GeneratedColumn<int> get verseNumber => $composableBuilder(
+    column: $table.verseNumber,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get arabic =>
+      $composableBuilder(column: $table.arabic, builder: (column) => column);
+
+  GeneratedColumn<String> get transcriptionTr => $composableBuilder(
+    column: $table.transcriptionTr,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get transcriptionEn => $composableBuilder(
+    column: $table.transcriptionEn,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get translationTr => $composableBuilder(
+    column: $table.translationTr,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get translationEn => $composableBuilder(
+    column: $table.translationEn,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get sortNumber => $composableBuilder(
+    column: $table.sortNumber,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get cachedAt =>
+      $composableBuilder(column: $table.cachedAt, builder: (column) => column);
+}
+
+class $$CachedVerseWordsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CachedVerseWordsTable,
+          CachedVerseWord,
+          $$CachedVerseWordsTableFilterComposer,
+          $$CachedVerseWordsTableOrderingComposer,
+          $$CachedVerseWordsTableAnnotationComposer,
+          $$CachedVerseWordsTableCreateCompanionBuilder,
+          $$CachedVerseWordsTableUpdateCompanionBuilder,
+          (
+            CachedVerseWord,
+            BaseReferences<
+              _$AppDatabase,
+              $CachedVerseWordsTable,
+              CachedVerseWord
+            >,
+          ),
+          CachedVerseWord,
+          PrefetchHooks Function()
+        > {
+  $$CachedVerseWordsTableTableManager(
+    _$AppDatabase db,
+    $CachedVerseWordsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CachedVerseWordsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CachedVerseWordsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CachedVerseWordsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> surahId = const Value.absent(),
+                Value<int> verseNumber = const Value.absent(),
+                Value<String> arabic = const Value.absent(),
+                Value<String?> transcriptionTr = const Value.absent(),
+                Value<String?> transcriptionEn = const Value.absent(),
+                Value<String?> translationTr = const Value.absent(),
+                Value<String?> translationEn = const Value.absent(),
+                Value<int> sortNumber = const Value.absent(),
+                Value<DateTime> cachedAt = const Value.absent(),
+              }) => CachedVerseWordsCompanion(
+                id: id,
+                surahId: surahId,
+                verseNumber: verseNumber,
+                arabic: arabic,
+                transcriptionTr: transcriptionTr,
+                transcriptionEn: transcriptionEn,
+                translationTr: translationTr,
+                translationEn: translationEn,
+                sortNumber: sortNumber,
+                cachedAt: cachedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int surahId,
+                required int verseNumber,
+                required String arabic,
+                Value<String?> transcriptionTr = const Value.absent(),
+                Value<String?> transcriptionEn = const Value.absent(),
+                Value<String?> translationTr = const Value.absent(),
+                Value<String?> translationEn = const Value.absent(),
+                required int sortNumber,
+                Value<DateTime> cachedAt = const Value.absent(),
+              }) => CachedVerseWordsCompanion.insert(
+                id: id,
+                surahId: surahId,
+                verseNumber: verseNumber,
+                arabic: arabic,
+                transcriptionTr: transcriptionTr,
+                transcriptionEn: transcriptionEn,
+                translationTr: translationTr,
+                translationEn: translationEn,
+                sortNumber: sortNumber,
+                cachedAt: cachedAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$CachedVerseWordsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CachedVerseWordsTable,
+      CachedVerseWord,
+      $$CachedVerseWordsTableFilterComposer,
+      $$CachedVerseWordsTableOrderingComposer,
+      $$CachedVerseWordsTableAnnotationComposer,
+      $$CachedVerseWordsTableCreateCompanionBuilder,
+      $$CachedVerseWordsTableUpdateCompanionBuilder,
+      (
+        CachedVerseWord,
+        BaseReferences<_$AppDatabase, $CachedVerseWordsTable, CachedVerseWord>,
+      ),
+      CachedVerseWord,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -4522,4 +6332,8 @@ class $AppDatabaseManager {
         _db,
         _db.downloadedTranslations,
       );
+  $$CachedTranslationsTableTableManager get cachedTranslations =>
+      $$CachedTranslationsTableTableManager(_db, _db.cachedTranslations);
+  $$CachedVerseWordsTableTableManager get cachedVerseWords =>
+      $$CachedVerseWordsTableTableManager(_db, _db.cachedVerseWords);
 }

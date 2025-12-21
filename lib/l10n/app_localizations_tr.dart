@@ -202,4 +202,22 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get delete => 'Sil';
+
+  @override
+  String get offlineMode => 'Çevrimdışı Mod';
+
+  @override
+  String get offlineMessage => 'Çevrimdışısınız. Önbellekten yükleniyor.';
+
+  @override
+  String get noInternetConnection => 'İnternet bağlantısı yok';
+
+  @override
+  String get retry => 'Tekrar Dene';
+
+  @override
+  String get noCachedData => 'Önbellekte veri yok. Lütfen internete bağlanın.';
+
+  @override
+  String get loadingFromCache => 'Önbellekten yükleniyor...';
 }

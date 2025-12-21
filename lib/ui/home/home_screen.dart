@@ -126,7 +126,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           },
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('Error: $err')),
+        error: (err, stack) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.cloud_off,
+                  size: 64,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  l10n.noInternetConnection,
+                  style: Theme.of(context).textTheme.titleLarge,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l10n.noCachedData,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                FilledButton.icon(
+                  onPressed: () => ref.invalidate(surahsProvider),
+                  icon: const Icon(Icons.refresh),
+                  label: Text(l10n.retry),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {

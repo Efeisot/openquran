@@ -475,6 +475,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete'**
   String get delete;
+
+  /// No description provided for @offlineMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline Mode'**
+  String get offlineMode;
+
+  /// No description provided for @offlineMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You are offline. Showing cached data.'**
+  String get offlineMessage;
+
+  /// No description provided for @noInternetConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection'**
+  String get noInternetConnection;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @noCachedData.
+  ///
+  /// In en, this message translates to:
+  /// **'No cached data available. Please connect to the internet.'**
+  String get noCachedData;
+
+  /// No description provided for @loadingFromCache.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading from cache...'**
+  String get loadingFromCache;
 }
 
 class _AppLocalizationsDelegate
