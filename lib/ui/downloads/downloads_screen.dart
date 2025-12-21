@@ -131,20 +131,25 @@ class _DownloadsScreenState extends ConsumerState<DownloadsScreen> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-              if (progress != null && !progress.isComplete) ...[
+              if (progress != null &&
+                  !progress.isComplete &&
+                  !progress.isCancelled &&
+                  progress.error == null) ...[
                 const SizedBox(height: 4),
                 LinearProgressIndicator(value: progress.progress),
                 const SizedBox(height: 2),
                 Text(
-                  '${progress.currentSurah}/${progress.totalSurahs} surahs',
+                  'Downloading ${progress.currentSurah}/${progress.totalSurahs} surahs (${(progress.progress * 100).toInt()}%)',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
-              if (progress?.error != null) ...[
+              if (progress?.isCancelled == true) ...[
                 const SizedBox(height: 4),
                 Text(
-                  'Error: ${progress!.error}',
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  'Download cancelled',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
                 ),
               ],
             ],
