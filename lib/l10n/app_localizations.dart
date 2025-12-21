@@ -463,6 +463,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Translation deleted'**
   String get translationDeleted;
+
+  /// No description provided for @downloadTranslations.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Translations'**
+  String get downloadTranslations;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
 }
 
 class _AppLocalizationsDelegate

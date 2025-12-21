@@ -60,5 +60,7 @@
   "apiProvider": "API Provider",
   "apiCredit": "Quran data provided by acikkuran.com",
   "deleteTranslation": "Delete Translation",
-  "translationDeleted": "Translation deleted"
+  "translationDeleted": "Translation deleted",
+  "downloadTranslations": "Download Translations",
+  "delete": "Delete"
 }

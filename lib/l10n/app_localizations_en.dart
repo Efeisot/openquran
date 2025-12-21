@@ -194,4 +194,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get translationDeleted => 'Translation deleted';
+
+  @override
+  String get downloadTranslations => 'Download Translations';
+
+  @override
+  String get delete => 'Delete';
 }

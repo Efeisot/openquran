@@ -226,6 +226,42 @@ class QuranRepository {
   Future<void> deleteNote(int id) {
     return (_db.delete(_db.notes)..where((t) => t.id.equals(id))).go();
   }
+
+  // Downloaded Translations Management
+  Future<List<DownloadedTranslation>> getDownloadedTranslations() {
+    return _db.select(_db.downloadedTranslations).get();
+  }
+
+  Future<bool> isTranslationDownloaded(int authorId) async {
+    final result = await (_db.select(
+      _db.downloadedTranslations,
+    )..where((t) => t.authorId.equals(authorId))).getSingleOrNull();
+    return result != null;
+  }
+
+  Future<void> saveDownloadedTranslation({
+    required int authorId,
+    required String authorName,
+    required int totalVerses,
+  }) async {
+    await _db
+        .into(_db.downloadedTranslations)
+        .insert(
+          DownloadedTranslationsCompanion(
+            authorId: Value(authorId),
+            authorName: Value(authorName),
+            downloadDate: Value(DateTime.now()),
+            totalVerses: Value(totalVerses),
+          ),
+          mode: InsertMode.insertOrReplace,
+        );
+  }
+
+  Future<void> deleteDownloadedTranslation(int authorId) async {
+    await (_db.delete(
+      _db.downloadedTranslations,
+    )..where((t) => t.authorId.equals(authorId))).go();
+  }
 }
 
 class SurahWithVerses {

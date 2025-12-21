@@ -50,12 +50,34 @@ class Notes extends Table {
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 }
 
-@DriftDatabase(tables: [Surahs, Verses, Authors, Translations, Notes])
+class DownloadedTranslations extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get authorId =>
+      integer().references(Authors, #id, onDelete: KeyAction.cascade)();
+  TextColumn get authorName => text()();
+  DateTimeColumn get downloadDate =>
+      dateTime().withDefault(currentDateAndTime)();
+  IntColumn get totalVerses => integer()();
+
+  @override
+  Set<Column> get primaryKey => {authorId};
+}
+
+@DriftDatabase(
+  tables: [
+    Surahs,
+    Verses,
+    Authors,
+    Translations,
+    Notes,
+    DownloadedTranslations,
+  ],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
@@ -66,6 +88,9 @@ class AppDatabase extends _$AppDatabase {
       onUpgrade: (Migrator m, int from, int to) async {
         if (from < 2) {
           await m.createTable(notes);
+        }
+        if (from < 3) {
+          await m.createTable(downloadedTranslations);
         }
       },
     );

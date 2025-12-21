@@ -1991,6 +1991,376 @@ class NotesCompanion extends UpdateCompanion<Note> {
   }
 }
 
+class $DownloadedTranslationsTable extends DownloadedTranslations
+    with TableInfo<$DownloadedTranslationsTable, DownloadedTranslation> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DownloadedTranslationsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _authorIdMeta = const VerificationMeta(
+    'authorId',
+  );
+  @override
+  late final GeneratedColumn<int> authorId = GeneratedColumn<int>(
+    'author_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES authors (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _authorNameMeta = const VerificationMeta(
+    'authorName',
+  );
+  @override
+  late final GeneratedColumn<String> authorName = GeneratedColumn<String>(
+    'author_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _downloadDateMeta = const VerificationMeta(
+    'downloadDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> downloadDate = GeneratedColumn<DateTime>(
+    'download_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _totalVersesMeta = const VerificationMeta(
+    'totalVerses',
+  );
+  @override
+  late final GeneratedColumn<int> totalVerses = GeneratedColumn<int>(
+    'total_verses',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    authorId,
+    authorName,
+    downloadDate,
+    totalVerses,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'downloaded_translations';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<DownloadedTranslation> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('author_id')) {
+      context.handle(
+        _authorIdMeta,
+        authorId.isAcceptableOrUnknown(data['author_id']!, _authorIdMeta),
+      );
+    }
+    if (data.containsKey('author_name')) {
+      context.handle(
+        _authorNameMeta,
+        authorName.isAcceptableOrUnknown(data['author_name']!, _authorNameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_authorNameMeta);
+    }
+    if (data.containsKey('download_date')) {
+      context.handle(
+        _downloadDateMeta,
+        downloadDate.isAcceptableOrUnknown(
+          data['download_date']!,
+          _downloadDateMeta,
+        ),
+      );
+    }
+    if (data.containsKey('total_verses')) {
+      context.handle(
+        _totalVersesMeta,
+        totalVerses.isAcceptableOrUnknown(
+          data['total_verses']!,
+          _totalVersesMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_totalVersesMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {authorId};
+  @override
+  DownloadedTranslation map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DownloadedTranslation(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      authorId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}author_id'],
+      )!,
+      authorName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}author_name'],
+      )!,
+      downloadDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}download_date'],
+      )!,
+      totalVerses: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}total_verses'],
+      )!,
+    );
+  }
+
+  @override
+  $DownloadedTranslationsTable createAlias(String alias) {
+    return $DownloadedTranslationsTable(attachedDatabase, alias);
+  }
+}
+
+class DownloadedTranslation extends DataClass
+    implements Insertable<DownloadedTranslation> {
+  final int id;
+  final int authorId;
+  final String authorName;
+  final DateTime downloadDate;
+  final int totalVerses;
+  const DownloadedTranslation({
+    required this.id,
+    required this.authorId,
+    required this.authorName,
+    required this.downloadDate,
+    required this.totalVerses,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['author_id'] = Variable<int>(authorId);
+    map['author_name'] = Variable<String>(authorName);
+    map['download_date'] = Variable<DateTime>(downloadDate);
+    map['total_verses'] = Variable<int>(totalVerses);
+    return map;
+  }
+
+  DownloadedTranslationsCompanion toCompanion(bool nullToAbsent) {
+    return DownloadedTranslationsCompanion(
+      id: Value(id),
+      authorId: Value(authorId),
+      authorName: Value(authorName),
+      downloadDate: Value(downloadDate),
+      totalVerses: Value(totalVerses),
+    );
+  }
+
+  factory DownloadedTranslation.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DownloadedTranslation(
+      id: serializer.fromJson<int>(json['id']),
+      authorId: serializer.fromJson<int>(json['authorId']),
+      authorName: serializer.fromJson<String>(json['authorName']),
+      downloadDate: serializer.fromJson<DateTime>(json['downloadDate']),
+      totalVerses: serializer.fromJson<int>(json['totalVerses']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'authorId': serializer.toJson<int>(authorId),
+      'authorName': serializer.toJson<String>(authorName),
+      'downloadDate': serializer.toJson<DateTime>(downloadDate),
+      'totalVerses': serializer.toJson<int>(totalVerses),
+    };
+  }
+
+  DownloadedTranslation copyWith({
+    int? id,
+    int? authorId,
+    String? authorName,
+    DateTime? downloadDate,
+    int? totalVerses,
+  }) => DownloadedTranslation(
+    id: id ?? this.id,
+    authorId: authorId ?? this.authorId,
+    authorName: authorName ?? this.authorName,
+    downloadDate: downloadDate ?? this.downloadDate,
+    totalVerses: totalVerses ?? this.totalVerses,
+  );
+  DownloadedTranslation copyWithCompanion(
+    DownloadedTranslationsCompanion data,
+  ) {
+    return DownloadedTranslation(
+      id: data.id.present ? data.id.value : this.id,
+      authorId: data.authorId.present ? data.authorId.value : this.authorId,
+      authorName: data.authorName.present
+          ? data.authorName.value
+          : this.authorName,
+      downloadDate: data.downloadDate.present
+          ? data.downloadDate.value
+          : this.downloadDate,
+      totalVerses: data.totalVerses.present
+          ? data.totalVerses.value
+          : this.totalVerses,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DownloadedTranslation(')
+          ..write('id: $id, ')
+          ..write('authorId: $authorId, ')
+          ..write('authorName: $authorName, ')
+          ..write('downloadDate: $downloadDate, ')
+          ..write('totalVerses: $totalVerses')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, authorId, authorName, downloadDate, totalVerses);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DownloadedTranslation &&
+          other.id == this.id &&
+          other.authorId == this.authorId &&
+          other.authorName == this.authorName &&
+          other.downloadDate == this.downloadDate &&
+          other.totalVerses == this.totalVerses);
+}
+
+class DownloadedTranslationsCompanion
+    extends UpdateCompanion<DownloadedTranslation> {
+  final Value<int> id;
+  final Value<int> authorId;
+  final Value<String> authorName;
+  final Value<DateTime> downloadDate;
+  final Value<int> totalVerses;
+  const DownloadedTranslationsCompanion({
+    this.id = const Value.absent(),
+    this.authorId = const Value.absent(),
+    this.authorName = const Value.absent(),
+    this.downloadDate = const Value.absent(),
+    this.totalVerses = const Value.absent(),
+  });
+  DownloadedTranslationsCompanion.insert({
+    required int id,
+    this.authorId = const Value.absent(),
+    required String authorName,
+    this.downloadDate = const Value.absent(),
+    required int totalVerses,
+  }) : id = Value(id),
+       authorName = Value(authorName),
+       totalVerses = Value(totalVerses);
+  static Insertable<DownloadedTranslation> custom({
+    Expression<int>? id,
+    Expression<int>? authorId,
+    Expression<String>? authorName,
+    Expression<DateTime>? downloadDate,
+    Expression<int>? totalVerses,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (authorId != null) 'author_id': authorId,
+      if (authorName != null) 'author_name': authorName,
+      if (downloadDate != null) 'download_date': downloadDate,
+      if (totalVerses != null) 'total_verses': totalVerses,
+    });
+  }
+
+  DownloadedTranslationsCompanion copyWith({
+    Value<int>? id,
+    Value<int>? authorId,
+    Value<String>? authorName,
+    Value<DateTime>? downloadDate,
+    Value<int>? totalVerses,
+  }) {
+    return DownloadedTranslationsCompanion(
+      id: id ?? this.id,
+      authorId: authorId ?? this.authorId,
+      authorName: authorName ?? this.authorName,
+      downloadDate: downloadDate ?? this.downloadDate,
+      totalVerses: totalVerses ?? this.totalVerses,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (authorId.present) {
+      map['author_id'] = Variable<int>(authorId.value);
+    }
+    if (authorName.present) {
+      map['author_name'] = Variable<String>(authorName.value);
+    }
+    if (downloadDate.present) {
+      map['download_date'] = Variable<DateTime>(downloadDate.value);
+    }
+    if (totalVerses.present) {
+      map['total_verses'] = Variable<int>(totalVerses.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DownloadedTranslationsCompanion(')
+          ..write('id: $id, ')
+          ..write('authorId: $authorId, ')
+          ..write('authorName: $authorName, ')
+          ..write('downloadDate: $downloadDate, ')
+          ..write('totalVerses: $totalVerses')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1999,6 +2369,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $AuthorsTable authors = $AuthorsTable(this);
   late final $TranslationsTable translations = $TranslationsTable(this);
   late final $NotesTable notes = $NotesTable(this);
+  late final $DownloadedTranslationsTable downloadedTranslations =
+      $DownloadedTranslationsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2009,7 +2381,18 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     authors,
     translations,
     notes,
+    downloadedTranslations,
   ];
+  @override
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'authors',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('downloaded_translations', kind: UpdateKind.delete)],
+    ),
+  ]);
 }
 
 typedef $$SurahsTableCreateCompanionBuilder =
@@ -2854,6 +3237,34 @@ final class $$AuthorsTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<
+    $DownloadedTranslationsTable,
+    List<DownloadedTranslation>
+  >
+  _downloadedTranslationsRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.downloadedTranslations,
+        aliasName: $_aliasNameGenerator(
+          db.authors.id,
+          db.downloadedTranslations.authorId,
+        ),
+      );
+
+  $$DownloadedTranslationsTableProcessedTableManager
+  get downloadedTranslationsRefs {
+    final manager = $$DownloadedTranslationsTableTableManager(
+      $_db,
+      $_db.downloadedTranslations,
+    ).filter((f) => f.authorId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _downloadedTranslationsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$AuthorsTableFilterComposer
@@ -2907,6 +3318,32 @@ class $$AuthorsTableFilterComposer
                 $removeJoinBuilderFromRootComposer,
           ),
     );
+    return f(composer);
+  }
+
+  Expression<bool> downloadedTranslationsRefs(
+    Expression<bool> Function($$DownloadedTranslationsTableFilterComposer f) f,
+  ) {
+    final $$DownloadedTranslationsTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.downloadedTranslations,
+          getReferencedColumn: (t) => t.authorId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$DownloadedTranslationsTableFilterComposer(
+                $db: $db,
+                $table: $db.downloadedTranslations,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
     return f(composer);
   }
 }
@@ -2988,6 +3425,32 @@ class $$AuthorsTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> downloadedTranslationsRefs<T extends Object>(
+    Expression<T> Function($$DownloadedTranslationsTableAnnotationComposer a) f,
+  ) {
+    final $$DownloadedTranslationsTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.downloadedTranslations,
+          getReferencedColumn: (t) => t.authorId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$DownloadedTranslationsTableAnnotationComposer(
+                $db: $db,
+                $table: $db.downloadedTranslations,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$AuthorsTableTableManager
@@ -3003,7 +3466,10 @@ class $$AuthorsTableTableManager
           $$AuthorsTableUpdateCompanionBuilder,
           (Author, $$AuthorsTableReferences),
           Author,
-          PrefetchHooks Function({bool translationsRefs})
+          PrefetchHooks Function({
+            bool translationsRefs,
+            bool downloadedTranslationsRefs,
+          })
         > {
   $$AuthorsTableTableManager(_$AppDatabase db, $AuthorsTable table)
     : super(
@@ -3048,35 +3514,63 @@ class $$AuthorsTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({translationsRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [if (translationsRefs) db.translations],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (translationsRefs)
-                    await $_getPrefetchedData<
-                      Author,
-                      $AuthorsTable,
-                      Translation
-                    >(
-                      currentTable: table,
-                      referencedTable: $$AuthorsTableReferences
-                          ._translationsRefsTable(db),
-                      managerFromTypedResult: (p0) => $$AuthorsTableReferences(
-                        db,
-                        table,
-                        p0,
-                      ).translationsRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.authorId == item.id),
-                      typedResults: items,
-                    ),
-                ];
+          prefetchHooksCallback:
+              ({translationsRefs = false, downloadedTranslationsRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (translationsRefs) db.translations,
+                    if (downloadedTranslationsRefs) db.downloadedTranslations,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (translationsRefs)
+                        await $_getPrefetchedData<
+                          Author,
+                          $AuthorsTable,
+                          Translation
+                        >(
+                          currentTable: table,
+                          referencedTable: $$AuthorsTableReferences
+                              ._translationsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$AuthorsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).translationsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.authorId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (downloadedTranslationsRefs)
+                        await $_getPrefetchedData<
+                          Author,
+                          $AuthorsTable,
+                          DownloadedTranslation
+                        >(
+                          currentTable: table,
+                          referencedTable: $$AuthorsTableReferences
+                              ._downloadedTranslationsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$AuthorsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).downloadedTranslationsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.authorId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -3093,7 +3587,10 @@ typedef $$AuthorsTableProcessedTableManager =
       $$AuthorsTableUpdateCompanionBuilder,
       (Author, $$AuthorsTableReferences),
       Author,
-      PrefetchHooks Function({bool translationsRefs})
+      PrefetchHooks Function({
+        bool translationsRefs,
+        bool downloadedTranslationsRefs,
+      })
     >;
 typedef $$TranslationsTableCreateCompanionBuilder =
     TranslationsCompanion Function({
@@ -3665,6 +4162,347 @@ typedef $$NotesTableProcessedTableManager =
       Note,
       PrefetchHooks Function()
     >;
+typedef $$DownloadedTranslationsTableCreateCompanionBuilder =
+    DownloadedTranslationsCompanion Function({
+      required int id,
+      Value<int> authorId,
+      required String authorName,
+      Value<DateTime> downloadDate,
+      required int totalVerses,
+    });
+typedef $$DownloadedTranslationsTableUpdateCompanionBuilder =
+    DownloadedTranslationsCompanion Function({
+      Value<int> id,
+      Value<int> authorId,
+      Value<String> authorName,
+      Value<DateTime> downloadDate,
+      Value<int> totalVerses,
+    });
+
+final class $$DownloadedTranslationsTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $DownloadedTranslationsTable,
+          DownloadedTranslation
+        > {
+  $$DownloadedTranslationsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $AuthorsTable _authorIdTable(_$AppDatabase db) =>
+      db.authors.createAlias(
+        $_aliasNameGenerator(db.downloadedTranslations.authorId, db.authors.id),
+      );
+
+  $$AuthorsTableProcessedTableManager get authorId {
+    final $_column = $_itemColumn<int>('author_id')!;
+
+    final manager = $$AuthorsTableTableManager(
+      $_db,
+      $_db.authors,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_authorIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$DownloadedTranslationsTableFilterComposer
+    extends Composer<_$AppDatabase, $DownloadedTranslationsTable> {
+  $$DownloadedTranslationsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get authorName => $composableBuilder(
+    column: $table.authorName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get downloadDate => $composableBuilder(
+    column: $table.downloadDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get totalVerses => $composableBuilder(
+    column: $table.totalVerses,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$AuthorsTableFilterComposer get authorId {
+    final $$AuthorsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.authorId,
+      referencedTable: $db.authors,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AuthorsTableFilterComposer(
+            $db: $db,
+            $table: $db.authors,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$DownloadedTranslationsTableOrderingComposer
+    extends Composer<_$AppDatabase, $DownloadedTranslationsTable> {
+  $$DownloadedTranslationsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get authorName => $composableBuilder(
+    column: $table.authorName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get downloadDate => $composableBuilder(
+    column: $table.downloadDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get totalVerses => $composableBuilder(
+    column: $table.totalVerses,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$AuthorsTableOrderingComposer get authorId {
+    final $$AuthorsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.authorId,
+      referencedTable: $db.authors,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AuthorsTableOrderingComposer(
+            $db: $db,
+            $table: $db.authors,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$DownloadedTranslationsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DownloadedTranslationsTable> {
+  $$DownloadedTranslationsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get authorName => $composableBuilder(
+    column: $table.authorName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get downloadDate => $composableBuilder(
+    column: $table.downloadDate,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get totalVerses => $composableBuilder(
+    column: $table.totalVerses,
+    builder: (column) => column,
+  );
+
+  $$AuthorsTableAnnotationComposer get authorId {
+    final $$AuthorsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.authorId,
+      referencedTable: $db.authors,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AuthorsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.authors,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$DownloadedTranslationsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $DownloadedTranslationsTable,
+          DownloadedTranslation,
+          $$DownloadedTranslationsTableFilterComposer,
+          $$DownloadedTranslationsTableOrderingComposer,
+          $$DownloadedTranslationsTableAnnotationComposer,
+          $$DownloadedTranslationsTableCreateCompanionBuilder,
+          $$DownloadedTranslationsTableUpdateCompanionBuilder,
+          (DownloadedTranslation, $$DownloadedTranslationsTableReferences),
+          DownloadedTranslation,
+          PrefetchHooks Function({bool authorId})
+        > {
+  $$DownloadedTranslationsTableTableManager(
+    _$AppDatabase db,
+    $DownloadedTranslationsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DownloadedTranslationsTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$DownloadedTranslationsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$DownloadedTranslationsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> authorId = const Value.absent(),
+                Value<String> authorName = const Value.absent(),
+                Value<DateTime> downloadDate = const Value.absent(),
+                Value<int> totalVerses = const Value.absent(),
+              }) => DownloadedTranslationsCompanion(
+                id: id,
+                authorId: authorId,
+                authorName: authorName,
+                downloadDate: downloadDate,
+                totalVerses: totalVerses,
+              ),
+          createCompanionCallback:
+              ({
+                required int id,
+                Value<int> authorId = const Value.absent(),
+                required String authorName,
+                Value<DateTime> downloadDate = const Value.absent(),
+                required int totalVerses,
+              }) => DownloadedTranslationsCompanion.insert(
+                id: id,
+                authorId: authorId,
+                authorName: authorName,
+                downloadDate: downloadDate,
+                totalVerses: totalVerses,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$DownloadedTranslationsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({authorId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (authorId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.authorId,
+                                referencedTable:
+                                    $$DownloadedTranslationsTableReferences
+                                        ._authorIdTable(db),
+                                referencedColumn:
+                                    $$DownloadedTranslationsTableReferences
+                                        ._authorIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$DownloadedTranslationsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $DownloadedTranslationsTable,
+      DownloadedTranslation,
+      $$DownloadedTranslationsTableFilterComposer,
+      $$DownloadedTranslationsTableOrderingComposer,
+      $$DownloadedTranslationsTableAnnotationComposer,
+      $$DownloadedTranslationsTableCreateCompanionBuilder,
+      $$DownloadedTranslationsTableUpdateCompanionBuilder,
+      (DownloadedTranslation, $$DownloadedTranslationsTableReferences),
+      DownloadedTranslation,
+      PrefetchHooks Function({bool authorId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3679,4 +4517,9 @@ class $AppDatabaseManager {
       $$TranslationsTableTableManager(_db, _db.translations);
   $$NotesTableTableManager get notes =>
       $$NotesTableTableManager(_db, _db.notes);
+  $$DownloadedTranslationsTableTableManager get downloadedTranslations =>
+      $$DownloadedTranslationsTableTableManager(
+        _db,
+        _db.downloadedTranslations,
+      );
 }

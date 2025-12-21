@@ -60,5 +60,7 @@
   "apiProvider": "API Sağlayıcısı",
   "apiCredit": "Kuran verileri acikkuran.com tarafından sağlanmaktadır",
   "deleteTranslation": "Çeviriyi Sil",
-  "translationDeleted": "Çeviri silindi"
+  "translationDeleted": "Çeviri silindi",
+  "downloadTranslations": "Çevirileri İndir",
+  "delete": "Sil"
 }

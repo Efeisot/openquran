@@ -196,4 +196,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get translationDeleted => 'Çeviri silindi';
+
+  @override
+  String get downloadTranslations => 'Çevirileri İndir';
+
+  @override
+  String get delete => 'Sil';
 }
