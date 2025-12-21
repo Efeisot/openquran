@@ -16,20 +16,54 @@ class _DownloadsScreenState extends ConsumerState<DownloadsScreen> {
   final Map<int, DownloadProgress?> _downloadProgress = {};
 
   @override
-  void initState() {
-    super.initState();
-    // Listen to download progress
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Listen to download progress after widget is built
     ref.read(downloadManagerProvider).progressStream.listen((progress) {
       if (mounted) {
         setState(() {
           _downloadProgress[progress.authorId] = progress;
         });
 
-        // Clear progress when complete or cancelled
+        // Show error as SnackBar
+        if (progress.error != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Download failed: ${progress.error}'),
+              duration: const Duration(seconds: 5),
+              action: SnackBarAction(
+                label: 'Retry',
+                onPressed: () async {
+                  final authors = await ref
+                      .read(quranRepositoryProvider)
+                      .getAuthors();
+                  final author = authors.firstWhere(
+                    (a) => a.id == progress.authorId,
+                  );
+                  ref
+                      .read(downloadManagerProvider)
+                      .downloadTranslation(author.id, author.name);
+                },
+              ),
+            ),
+          );
+        }
+
+        // Show completion message
+        if (progress.isComplete) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Download complete!'),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
+
+        // Clear progress when complete, cancelled, or error
         if (progress.isComplete ||
             progress.isCancelled ||
             progress.error != null) {
-          Future.delayed(const Duration(seconds: 2), () {
+          Future.delayed(const Duration(seconds: 3), () {
             if (mounted) {
               setState(() {
                 _downloadProgress.remove(progress.authorId);
