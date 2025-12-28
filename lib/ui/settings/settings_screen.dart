@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:open_quran/l10n/app_localizations.dart';
 import 'package:open_quran/data/local/preferences.dart';
+import 'package:flex_color_picker/flex_color_picker.dart';
 import '../../data/repository/quran_repository.dart';
 import '../../main.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -91,6 +92,55 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ref.read(materialYouProvider.notifier).setEnabled(value);
             },
           ),
+          // Custom Color Picker (shown when Material You is disabled)
+          if (!ref.watch(materialYouProvider))
+            ListTile(
+              leading: Icon(
+                Icons.palette,
+                color: ref.watch(customColorProvider),
+              ),
+              title: const Text('Custom Color'),
+              subtitle: ref.watch(customColorProvider) != null
+                  ? Text(
+                      'Using custom color',
+                      style: TextStyle(color: ref.watch(customColorProvider)),
+                    )
+                  : const Text('Use default teal'),
+              trailing: ref.watch(customColorProvider) != null
+                  ? IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        ref.read(customColorProvider.notifier).setColor(null);
+                      },
+                      tooltip: 'Reset to default',
+                    )
+                  : null,
+              onTap: () async {
+                final currentColor =
+                    ref.read(customColorProvider) ?? Colors.teal;
+                final newColor = await showColorPickerDialog(
+                  context,
+                  currentColor,
+                  title: Text('Select App Color'),
+                  heading: Text(
+                    'Choose your app color theme',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  subheading: Text(
+                    'Pick a color that will be used throughout the app',
+                  ),
+                  pickersEnabled: const {
+                    ColorPickerType.both: false,
+                    ColorPickerType.primary: true,
+                    ColorPickerType.accent: true,
+                    ColorPickerType.wheel: true,
+                  },
+                );
+                if (newColor != currentColor) {
+                  ref.read(customColorProvider.notifier).setColor(newColor);
+                }
+              },
+            ),
           ListTile(
             title: Text(l10n.language),
             subtitle: Text(locale?.languageCode.toUpperCase() ?? l10n.system),
@@ -104,6 +154,45 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               items: const [
                 DropdownMenuItem(value: Locale('en'), child: Text('English')),
                 DropdownMenuItem(value: Locale('tr'), child: Text('Türkçe')),
+              ],
+            ),
+          ),
+          // Font Selection
+          ListTile(
+            leading: const Icon(Icons.font_download),
+            title: const Text('UI Font'),
+            subtitle: Text(ref.watch(systemFontProvider) ?? 'Inter (Default)'),
+            trailing: DropdownButton<String?>(
+              value: ref.watch(systemFontProvider),
+              onChanged: (String? newFont) {
+                ref.read(systemFontProvider.notifier).setFont(newFont);
+              },
+              items: const [
+                DropdownMenuItem<String?>(
+                  value: null,
+                  child: Text('Inter (Default)'),
+                ),
+                DropdownMenuItem<String?>(
+                  value: 'Roboto',
+                  child: Text('Roboto'),
+                ),
+                DropdownMenuItem<String?>(
+                  value: 'Poppins',
+                  child: Text('Poppins'),
+                ),
+                DropdownMenuItem<String?>(value: 'Lato', child: Text('Lato')),
+                DropdownMenuItem<String?>(
+                  value: 'Open Sans',
+                  child: Text('Open Sans'),
+                ),
+                DropdownMenuItem<String?>(
+                  value: 'Montserrat',
+                  child: Text('Montserrat'),
+                ),
+                DropdownMenuItem<String?>(
+                  value: 'Nunito',
+                  child: Text('Nunito'),
+                ),
               ],
             ),
           ),
@@ -195,7 +284,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ListTile(
             leading: const Icon(Icons.info_outline),
             title: Text(l10n.version),
-            subtitle: const Text('v1.1-beta'),
+            subtitle: const Text('v1.2-beta'),
           ),
           const Divider(),
           const Divider(),

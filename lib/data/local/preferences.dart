@@ -20,6 +20,8 @@ class Preferences {
   static const String _onboardingCompletedKey = 'onboardingCompleted';
   static const String _defaultTranslationAuthorIdKey =
       'defaultTranslationAuthorId';
+  static const String _customColorKey = 'customColor';
+  static const String _systemFontKey = 'systemFont';
 
   ThemeMode getThemeMode() {
     final index = _prefs.getInt(_themeModeKey);
@@ -95,6 +97,36 @@ class Preferences {
       await _prefs.remove(_defaultTranslationAuthorIdKey);
     } else {
       await _prefs.setInt(_defaultTranslationAuthorIdKey, authorId);
+    }
+  }
+
+  // Custom color (nullable - null means use Material You or default)
+  Color? getCustomColor() {
+    final colorValue = _prefs.getInt(_customColorKey);
+    if (colorValue != null) {
+      return Color(colorValue);
+    }
+    return null;
+  }
+
+  Future<void> setCustomColor(Color? color) async {
+    if (color == null) {
+      await _prefs.remove(_customColorKey);
+    } else {
+      await _prefs.setInt(_customColorKey, color.value);
+    }
+  }
+
+  // System font (nullable - null means use default)
+  String? getSystemFont() {
+    return _prefs.getString(_systemFontKey);
+  }
+
+  Future<void> setSystemFont(String? font) async {
+    if (font == null) {
+      await _prefs.remove(_systemFontKey);
+    } else {
+      await _prefs.setString(_systemFontKey, font);
     }
   }
 }

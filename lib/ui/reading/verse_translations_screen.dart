@@ -55,6 +55,15 @@ class _VerseTranslationsScreenState
     currentVerseText = widget.verseText;
   }
 
+  @override
+  void dispose() {
+    // Save current position when disposing (user exiting the screen)
+    ref
+        .read(preferencesProvider)
+        .setLastRead(currentSurahId, currentVerseNumber);
+    super.dispose();
+  }
+
   void _navigateToPrevious() async {
     if (currentVerseNumber > 1) {
       // Previous verse in same surah
@@ -68,6 +77,11 @@ class _VerseTranslationsScreenState
         currentVerseNumber = prevVerse.verseNumber;
         currentVerseText = prevVerse.verse;
       });
+
+      // Save position after navigation
+      ref
+          .read(preferencesProvider)
+          .setLastRead(currentSurahId, currentVerseNumber);
     } else if (currentSurahId > 1) {
       // Last verse of previous surah
       final repository = ref.read(quranRepositoryProvider);
@@ -81,6 +95,11 @@ class _VerseTranslationsScreenState
         currentVerseNumber = lastVerse.verseNumber;
         currentVerseText = lastVerse.verse;
       });
+
+      // Save position after navigation
+      ref
+          .read(preferencesProvider)
+          .setLastRead(currentSurahId, currentVerseNumber);
     }
   }
 
@@ -98,6 +117,11 @@ class _VerseTranslationsScreenState
         currentVerseNumber = nextVerse.verseNumber;
         currentVerseText = nextVerse.verse;
       });
+
+      // Save position after navigation
+      ref
+          .read(preferencesProvider)
+          .setLastRead(currentSurahId, currentVerseNumber);
     } else if (currentSurahId < 114) {
       // First verse of next surah
       final nextSurahData = await repository.getSurahDetails(
@@ -110,6 +134,11 @@ class _VerseTranslationsScreenState
         currentVerseNumber = firstVerse.verseNumber;
         currentVerseText = firstVerse.verse;
       });
+
+      // Save position after navigation
+      ref
+          .read(preferencesProvider)
+          .setLastRead(currentSurahId, currentVerseNumber);
     }
   }
 
