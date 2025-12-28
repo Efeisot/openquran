@@ -5,6 +5,7 @@ import '../../data/repository/quran_repository.dart';
 import '../../data/local/database.dart';
 import '../../data/local/preferences.dart';
 import 'verse_translations_screen.dart';
+import 'saved_verses_screen.dart';
 
 final surahNotesProvider = FutureProvider.family<List<Note>, int>((
   ref,
@@ -162,6 +163,7 @@ class _ReadingScreenState extends ConsumerState<ReadingScreen> {
                 );
               }
               ref.invalidate(surahNotesProvider);
+              ref.invalidate(allNotesProvider); // Refresh saved verses screen
               if (context.mounted) Navigator.pop(context);
             },
             child: Text(AppLocalizations.of(context)!.save),

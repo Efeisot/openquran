@@ -10,7 +10,7 @@ class SavedVersesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notesAsync = ref.watch(_allNotesProvider);
+    final notesAsync = ref.watch(allNotesProvider);
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -77,7 +77,9 @@ class SavedVersesScreen extends ConsumerWidget {
                       await ref
                           .read(quranRepositoryProvider)
                           .deleteNote(note.id);
-                      ref.invalidate(_allNotesProvider);
+                      ref.invalidate(allNotesProvider);
+                      // Also invalidate the specific surah's notes to update reading screen
+                      ref.invalidate(surahNotesProvider(note.surahId));
                     },
                   ),
                   onTap: () {
@@ -101,7 +103,7 @@ class SavedVersesScreen extends ConsumerWidget {
   }
 }
 
-final _allNotesProvider = FutureProvider<List<Note>>((ref) async {
+final allNotesProvider = FutureProvider<List<Note>>((ref) async {
   final db = ref.watch(appDatabaseProvider);
   return db.select(db.notes).get();
 });
